@@ -38,7 +38,7 @@ export async function GET() {
     
     // Format response
     const formattedSources = sources.map(source => {
-      const stats = statsMap.get(source._id.toString()) || {
+      const stats = statsMap.get((source._id as any).toString()) || {
         articleCount: 0,
         lastArticle: null,
         languages: []

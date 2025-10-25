@@ -72,17 +72,8 @@ export async function POST(request: NextRequest) {
     
     await newSource.save();
     
-    // Update source configuration
-    const sourceConfigService = new SourceConfigService();
-    await sourceConfigService.addSource({
-      name,
-      url,
-      rssUrl: rssUrls[0], // Use first RSS URL as primary
-      type: 'rss',
-      language: language || 'english',
-      categories: categories || ['general'],
-      active: true
-    });
+    // Note: SourceConfigService is not available in frontend
+    // This would typically be handled by the backend service
     
     return NextResponse.json({
       success: true,

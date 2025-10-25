@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     const categoryHierarchy = mainCategories.map(mainCat => ({
       ...mainCat,
       subcategories: subCategories
-        .filter(subCat => subCat.parent && subCat.parent._id.toString() === mainCat._id.toString())
+        .filter(subCat => subCat.parent && subCat.parent._id.toString() === (mainCat._id as any).toString())
         .map(subCat => ({
           ...subCat,
           parent: undefined // Remove parent reference for cleaner response
