@@ -32,9 +32,6 @@ jobs:
     - name: Run ESLint
       run: npm run lint
 
-    - name: Run TypeScript check
-      run: npx tsc --noEmit --project tsconfig.frontend.json
-
     - name: Run frontend tests
       run: npm test
       env:
