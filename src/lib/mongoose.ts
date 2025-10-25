@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
-import { logger } from "./utils";
+// Avoid importing server-only logger in frontend build; use console as a fallback
 
 export async function connectDB() {
   try {
     const uri = process.env.DATABASE_URL || "mongodb://localhost:27017/newshub";
     await mongoose.connect(uri);
-    logger.info("✅ Connected to MongoDB (Mongoose)");
+    console.info("✅ Connected to MongoDB (Mongoose)");
   } catch (err) {
-    logger.error("❌ Failed to connect MongoDB", err);
+    console.error("❌ Failed to connect MongoDB", err);
     process.exit(1);
   }
 }
@@ -15,9 +15,9 @@ export async function connectDB() {
 export async function disconnectDB() {
   try {
     await mongoose.connection.close();
-    logger.info("🔒 MongoDB connection closed");
+    console.info("🔒 MongoDB connection closed");
   } catch (err) {
-    logger.error("❌ Error closing MongoDB connection", err);
+    console.error("❌ Error closing MongoDB connection", err);
   }
 }
 

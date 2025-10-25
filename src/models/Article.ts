@@ -15,7 +15,7 @@ export interface IArticle extends Document {
     height?: number;
     generated?: boolean;
   }>;
-  category: mongoose.Types.ObjectId;
+  category: any;
   categories: string[]; // Array of category strings like ["politics", "movies", "business"]
   tags: string[];
   author?: string; // Made optional
@@ -23,7 +23,7 @@ export interface IArticle extends Document {
   source: {
     name: string;
     url: string;
-    sourceId: mongoose.Types.ObjectId;
+  sourceId: any;
   };
   status: 'scraped' | 'pending' | 'processed' | 'published' | 'rejected' | 'needs_review';
   publishedAt: Date; // Original publish time from source
@@ -294,7 +294,7 @@ const articleSchema = new Schema<IArticle>({
 });
 
 // Generate slug and calculate metadata before validation (so required fields are set)
-articleSchema.pre('validate', function(next) {
+articleSchema.pre('validate', function(this: any, next: any) {
   // Generate slug if not provided
   if (this.isModified('title') && !this.slug) {
     this.slug = slugify(this.title, { lower: true, strict: true });

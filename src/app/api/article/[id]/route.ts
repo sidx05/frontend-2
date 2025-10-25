@@ -12,11 +12,12 @@ function sanitizeText(text: string | undefined | null): string {
 // GET /api/article/:id - Proxy to backend API
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: any
 ) {
   try {
-    const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
-    const response = await fetch(`${backendUrl}/api/article/${params.id}`, {
+  const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+  const _params = context?.params && typeof context.params.then === 'function' ? await context.params : context?.params;
+  const response = await fetch(`${backendUrl}/api/article/${_params?.id}`, {
       headers: {
         'Content-Type': 'application/json',
       },

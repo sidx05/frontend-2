@@ -5,6 +5,11 @@
  */
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    // Skip ESLint during production builds to avoid Next's deprecated lint options causing failures.
+    // We still run lint in CI as a separate job.
+    ignoreDuringBuilds: true,
+  },
   webpack: (config, { isServer }) => {
     // For server build, treat mongoose as external (leave require('mongoose') as runtime require)
     if (isServer) {

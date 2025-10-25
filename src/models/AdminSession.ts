@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IAdminSession extends Document {
-  userId: mongoose.Types.ObjectId;
+  userId: any;
   token: string;
   refreshToken: string;
   expiresAt: Date;
@@ -69,7 +69,7 @@ AdminSessionSchema.statics.cleanupExpiredSessions = async function() {
 };
 
 // Static method to deactivate all sessions for a user
-AdminSessionSchema.statics.deactivateUserSessions = async function(userId: mongoose.Types.ObjectId) {
+AdminSessionSchema.statics.deactivateUserSessions = async function(userId: any) {
   return this.updateMany(
     { userId, isActive: true },
     { isActive: false }

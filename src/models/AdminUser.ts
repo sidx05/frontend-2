@@ -70,7 +70,7 @@ AdminUserSchema.index({ email: 1 });
 AdminUserSchema.index({ isActive: 1 });
 
 // Hash password before saving
-AdminUserSchema.pre('save', async function(next) {
+AdminUserSchema.pre('save', async function(this: any, next: any) {
   if (!this.isModified('password')) return next();
   
   try {
@@ -83,17 +83,17 @@ AdminUserSchema.pre('save', async function(next) {
 });
 
 // Compare password method
-AdminUserSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean> {
+AdminUserSchema.methods.comparePassword = async function(this: any, candidatePassword: string): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
 // Check if account is locked
-AdminUserSchema.methods.isLocked = function(): boolean {
+AdminUserSchema.methods.isLocked = function(this: any): boolean {
   return !!(this.lockUntil && this.lockUntil > new Date());
 };
 
 // Increment login attempts
-AdminUserSchema.methods.incLoginAttempts = async function(): Promise<void> {
+AdminUserSchema.methods.incLoginAttempts = async function(this: any): Promise<void> {
   // If we have a previous lock that has expired, restart at 1
   if (this.lockUntil && this.lockUntil < new Date()) {
     return this.updateOne({
@@ -113,7 +113,7 @@ AdminUserSchema.methods.incLoginAttempts = async function(): Promise<void> {
 };
 
 // Reset login attempts
-AdminUserSchema.methods.resetLoginAttempts = async function(): Promise<void> {
+AdminUserSchema.methods.resetLoginAttempts = async function(this: any): Promise<void> {
   return this.updateOne({
     $unset: { loginAttempts: 1, lockUntil: 1 },
     $set: { lastLogin: new Date() }
@@ -121,12 +121,12 @@ AdminUserSchema.methods.resetLoginAttempts = async function(): Promise<void> {
 };
 
 // Virtual for account lock status
-AdminUserSchema.virtual('isAccountLocked').get(function() {
+AdminUserSchema.virtual('isAccountLocked').get(function(this: IAdminUser) {
   return this.isLocked();
 });
 
 // Transform output to remove sensitive data
-AdminUserSchema.methods.toJSON = function() {
+AdminUserSchema.methods.toJSON = function(this: any) {
   const userObject = this.toObject();
   delete userObject.password;
   delete userObject.loginAttempts;

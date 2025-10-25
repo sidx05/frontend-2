@@ -6,12 +6,12 @@ import { Article } from '@/models/Article';
 // GET /api/admin/articles/[id] - Get single article
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: any
 ) {
   try {
     await connectDB();
-    
-    const article = await Article.findById(params.id)
+    const _params = context?.params && typeof context.params.then === 'function' ? await context.params : context?.params;
+    const article = await Article.findById(_params?.id)
       .populate('category', 'key label')
       .lean();
     
@@ -39,7 +39,7 @@ export async function GET(
 // PUT /api/admin/articles/[id] - Update article
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: any
 ) {
   try {
     await connectDB();
@@ -52,8 +52,9 @@ export async function PUT(
       updateData.publishedAt = new Date(updateData.publishedAt);
     }
 
+    const _params = context?.params && typeof context.params.then === 'function' ? await context.params : context?.params;
     const article = await Article.findByIdAndUpdate(
-      params.id,
+      _params?.id,
       updateData,
       { new: true, runValidators: true }
     );
@@ -82,12 +83,12 @@ export async function PUT(
 // DELETE /api/admin/articles/[id] - Delete article
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: any
 ) {
   try {
     await connectDB();
-    
-    const article = await Article.findByIdAndDelete(params.id);
+    const _params = context?.params && typeof context.params.then === 'function' ? await context.params : context?.params;
+    const article = await Article.findByIdAndDelete(_params?.id);
 
     if (!article) {
       return NextResponse.json(

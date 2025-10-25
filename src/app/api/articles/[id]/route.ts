@@ -5,12 +5,12 @@ import { Article } from '@/models/Article';
 // GET /api/articles/[id] - Get single article by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: any
 ) {
   try {
     await connectDB();
-    
-    const article = await Article.findById(params.id);
+    const _params = context?.params && typeof context.params.then === 'function' ? await context.params : context?.params;
+    const article = await Article.findById(_params?.id);
     
     if (!article) {
       return NextResponse.json(
@@ -20,7 +20,7 @@ export async function GET(
     }
 
     // Increment view count
-    await Article.findByIdAndUpdate(params.id, { $inc: { viewCount: 1 } });
+  await Article.findByIdAndUpdate(_params?.id, { $inc: { viewCount: 1 } });
 
     // Format response
     const formattedArticle = {

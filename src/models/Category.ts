@@ -7,7 +7,7 @@ export interface ICategory extends Document {
   label: string;
   icon: string;
   color: string;
-  parent?: mongoose.Types.ObjectId;
+  parent?: any;
   order: number;
   createdAt: Date;
   updatedAt: Date;

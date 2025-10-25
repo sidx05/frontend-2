@@ -7,7 +7,7 @@ export interface ISource extends Document {
   url: string;
   rssUrls: string[];
   lang: string;
-  categories: mongoose.Types.ObjectId[];
+  categories: any[];
   active: boolean;
   lastScraped?: Date;
   createdAt: Date;

@@ -6,12 +6,12 @@ import { BrandWire } from '@/models/BrandWire';
 // GET /api/brand-wire/[id] - Get single Brand Wire article
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: any
 ) {
   try {
     await connectDB();
-    
-    const article = await BrandWire.findById(params.id);
+    const _params = context?.params && typeof context.params.then === 'function' ? await context.params : context?.params;
+    const article = await BrandWire.findById(_params?.id);
     
     if (!article) {
       return NextResponse.json(
@@ -20,8 +20,8 @@ export async function GET(
       );
     }
 
-    // Increment view count
-    await BrandWire.findByIdAndUpdate(params.id, { $inc: { viewCount: 1 } });
+  // Increment view count
+  await BrandWire.findByIdAndUpdate(_params?.id, { $inc: { viewCount: 1 } });
 
     return NextResponse.json({
       success: true,
@@ -40,7 +40,7 @@ export async function GET(
 // PUT /api/brand-wire/[id] - Update Brand Wire article
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: any
 ) {
   try {
     await connectDB();
@@ -56,8 +56,9 @@ export async function PUT(
       updateData.expiresAt = new Date(updateData.expiresAt);
     }
 
+    const _params = context?.params && typeof context.params.then === 'function' ? await context.params : context?.params;
     const article = await BrandWire.findByIdAndUpdate(
-      params.id,
+      _params?.id,
       updateData,
       { new: true, runValidators: true }
     );
@@ -86,12 +87,12 @@ export async function PUT(
 // DELETE /api/brand-wire/[id] - Delete Brand Wire article
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: any
 ) {
   try {
     await connectDB();
-    
-    const article = await BrandWire.findByIdAndDelete(params.id);
+    const _params = context?.params && typeof context.params.then === 'function' ? await context.params : context?.params;
+    const article = await BrandWire.findByIdAndDelete(_params?.id);
 
     if (!article) {
       return NextResponse.json(

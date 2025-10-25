@@ -160,7 +160,7 @@ const brandWireSchema = new Schema<IBrandWire>({
 });
 
 // Generate slug before saving
-brandWireSchema.pre('save', function(next) {
+brandWireSchema.pre('save', function(this: any, next: any) {
   if (this.isModified('title') || !this.slug) {
     this.slug = slugify(this.title, { lower: true, strict: true });
   }

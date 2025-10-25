@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import mongoose from 'mongoose';
 import connectDB from './database';
 import AdminUser, { IAdminUser } from '@/models/AdminUser';
 import AdminSession from '@/models/AdminSession';
@@ -295,8 +294,9 @@ export class AuthService {
     try {
       await connectDB();
 
+      // Mongoose accepts string ids for matching, avoid importing mongoose in frontend build
       await AdminSession.updateMany(
-        { userId: new mongoose.Types.ObjectId(userId), isActive: true },
+        { userId: userId, isActive: true },
         { isActive: false }
       );
 
