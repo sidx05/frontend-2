@@ -1,0 +1,79 @@
+# NewsHub Robots.txt
+# Website: NewsHub
+# Last updated: January 2024
+
+# Allow all search engines to crawl the site
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://newshub.com/sitemap.xml
+
+# Crawl delay (be respectful to servers)
+Crawl-delay: 1
+
+# Block admin areas
+Disallow: /admin/
+Disallow: /api/admin/
+Disallow: /dashboard/
+
+# Block user account pages
+Disallow: /account/
+Disallow: /profile/
+Disallow: /settings/
+
+# Block search and filter pages (to prevent duplicate content)
+Disallow: /search?
+Disallow: /filter?
+Disallow: /category?
+
+# Block API endpoints
+Disallow: /api/
+Disallow: /graphql
+
+# Block static files that don't need indexing
+Disallow: /_next/
+Disallow: /static/
+Disallow: *.css$
+Disallow: *.js$
+Disallow: *.json$
+
+# Allow specific search engines with custom rules
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+# Block problematic bots
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /

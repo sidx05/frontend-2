@@ -1,0 +1,412 @@
+{
+  "telugu": {
+    "politics": [
+      {
+        "name": "Eenadu Politics",
+        "url": "https://www.eenadu.net",
+        "rssUrls": ["https://www.eenadu.net/rss/politics.xml"],
+        "language": "te",
+        "categories": ["politics"],
+        "active": true
+      },
+      {
+        "name": "Sakshi Politics",
+        "url": "https://www.sakshi.com",
+        "rssUrls": ["https://www.sakshi.com/rss/politics.xml"],
+        "language": "te",
+        "categories": ["politics"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Eenadu Sports",
+        "url": "https://www.eenadu.net",
+        "rssUrls": ["https://www.eenadu.net/rss/sports.xml"],
+        "language": "te",
+        "categories": ["sports"],
+        "active": true
+      },
+      {
+        "name": "Sakshi Sports",
+        "url": "https://www.sakshi.com",
+        "rssUrls": ["https://www.sakshi.com/rss/sports.xml"],
+        "language": "te",
+        "categories": ["sports"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Eenadu Entertainment",
+        "url": "https://www.eenadu.net",
+        "rssUrls": ["https://www.eenadu.net/rss/entertainment.xml"],
+        "language": "te",
+        "categories": ["entertainment"],
+        "active": true
+      },
+      {
+        "name": "Sakshi Entertainment",
+        "url": "https://www.sakshi.com",
+        "rssUrls": ["https://www.sakshi.com/rss/entertainment.xml"],
+        "language": "te",
+        "categories": ["entertainment"],
+        "active": true
+      }
+    ],
+    "technology": [
+      {
+        "name": "Eenadu Technology",
+        "url": "https://www.eenadu.net",
+        "rssUrls": ["https://www.eenadu.net/rss/technology.xml"],
+        "language": "te",
+        "categories": ["technology"],
+        "active": true
+      }
+    ],
+    "health": [
+      {
+        "name": "Eenadu Health",
+        "url": "https://www.eenadu.net",
+        "rssUrls": ["https://www.eenadu.net/rss/health.xml"],
+        "language": "te",
+        "categories": ["health"],
+        "active": true
+      }
+    ],
+    "business": [
+      {
+        "name": "Eenadu Business",
+        "url": "https://www.eenadu.net",
+        "rssUrls": ["https://www.eenadu.net/rss/business.xml"],
+        "language": "te",
+        "categories": ["business"],
+        "active": true
+      }
+    ]
+  },
+  "hindi": {
+    "politics": [
+      {
+        "name": "Aaj Tak Politics",
+        "url": "https://www.aajtak.in",
+        "rssUrls": ["https://www.aajtak.in/rss/politics.xml"],
+        "language": "hi",
+        "categories": ["politics"],
+        "active": true
+      },
+      {
+        "name": "Zee News Politics",
+        "url": "https://zeenews.india.com",
+        "rssUrls": ["https://zeenews.india.com/rss/politics.xml"],
+        "language": "hi",
+        "categories": ["politics"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Aaj Tak Sports",
+        "url": "https://www.aajtak.in",
+        "rssUrls": ["https://www.aajtak.in/rss/sports.xml"],
+        "language": "hi",
+        "categories": ["sports"],
+        "active": true
+      },
+      {
+        "name": "Zee News Sports",
+        "url": "https://zeenews.india.com",
+        "rssUrls": ["https://zeenews.india.com/rss/sports.xml"],
+        "language": "hi",
+        "categories": ["sports"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Aaj Tak Entertainment",
+        "url": "https://www.aajtak.in",
+        "rssUrls": ["https://www.aajtak.in/rss/entertainment.xml"],
+        "language": "hi",
+        "categories": ["entertainment"],
+        "active": true
+      },
+      {
+        "name": "Zee News Entertainment",
+        "url": "https://zeenews.india.com",
+        "rssUrls": ["https://zeenews.india.com/rss/entertainment.xml"],
+        "language": "hi",
+        "categories": ["entertainment"],
+        "active": true
+      }
+    ],
+    "technology": [
+      {
+        "name": "Aaj Tak Technology",
+        "url": "https://www.aajtak.in",
+        "rssUrls": ["https://www.aajtak.in/rss/technology.xml"],
+        "language": "hi",
+        "categories": ["technology"],
+        "active": true
+      }
+    ],
+    "health": [
+      {
+        "name": "Aaj Tak Health",
+        "url": "https://www.aajtak.in",
+        "rssUrls": ["https://www.aajtak.in/rss/health.xml"],
+        "language": "hi",
+        "categories": ["health"],
+        "active": true
+      }
+    ],
+    "business": [
+      {
+        "name": "Aaj Tak Business",
+        "url": "https://www.aajtak.in",
+        "rssUrls": ["https://www.aajtak.in/rss/business.xml"],
+        "language": "hi",
+        "categories": ["business"],
+        "active": true
+      }
+    ]
+  },
+  "english": {
+    "politics": [
+      {
+        "name": "Times of India Politics",
+        "url": "https://timesofindia.indiatimes.com",
+        "rssUrls": ["https://timesofindia.indiatimes.com/rssfeeds/1221656.cms"],
+        "language": "en",
+        "categories": ["politics"],
+        "active": true
+      },
+      {
+        "name": "The Hindu Politics",
+        "url": "https://www.thehindu.com",
+        "rssUrls": ["https://www.thehindu.com/news/national/?service=rss"],
+        "language": "en",
+        "categories": ["politics"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Times of India Sports",
+        "url": "https://timesofindia.indiatimes.com",
+        "rssUrls": ["https://timesofindia.indiatimes.com/rssfeeds/4719148.cms"],
+        "language": "en",
+        "categories": ["sports"],
+        "active": true
+      },
+      {
+        "name": "The Hindu Sports",
+        "url": "https://www.thehindu.com",
+        "rssUrls": ["https://www.thehindu.com/sport/?service=rss"],
+        "language": "en",
+        "categories": ["sports"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Times of India Entertainment",
+        "url": "https://timesofindia.indiatimes.com",
+        "rssUrls": ["https://timesofindia.indiatimes.com/rssfeeds/1081479906.cms"],
+        "language": "en",
+        "categories": ["entertainment"],
+        "active": true
+      },
+      {
+        "name": "The Hindu Entertainment",
+        "url": "https://www.thehindu.com",
+        "rssUrls": ["https://www.thehindu.com/entertainment/?service=rss"],
+        "language": "en",
+        "categories": ["entertainment"],
+        "active": true
+      }
+    ],
+    "technology": [
+      {
+        "name": "Times of India Technology",
+        "url": "https://timesofindia.indiatimes.com",
+        "rssUrls": ["https://timesofindia.indiatimes.com/rssfeeds/66949542.cms"],
+        "language": "en",
+        "categories": ["technology"],
+        "active": true
+      },
+      {
+        "name": "The Hindu Technology",
+        "url": "https://www.thehindu.com",
+        "rssUrls": ["https://www.thehindu.com/sci-tech/technology/?service=rss"],
+        "language": "en",
+        "categories": ["technology"],
+        "active": true
+      }
+    ],
+    "health": [
+      {
+        "name": "Times of India Health",
+        "url": "https://timesofindia.indiatimes.com",
+        "rssUrls": ["https://timesofindia.indiatimes.com/rssfeeds/3907419.cms"],
+        "language": "en",
+        "categories": ["health"],
+        "active": true
+      },
+      {
+        "name": "The Hindu Health",
+        "url": "https://www.thehindu.com",
+        "rssUrls": ["https://www.thehindu.com/sci-tech/health/?service=rss"],
+        "language": "en",
+        "categories": ["health"],
+        "active": true
+      }
+    ],
+    "business": [
+      {
+        "name": "Times of India Business",
+        "url": "https://timesofindia.indiatimes.com",
+        "rssUrls": ["https://timesofindia.indiatimes.com/rssfeeds/1898055.cms"],
+        "language": "en",
+        "categories": ["business"],
+        "active": true
+      },
+      {
+        "name": "The Hindu Business",
+        "url": "https://www.thehindu.com",
+        "rssUrls": ["https://www.thehindu.com/business/?service=rss"],
+        "language": "en",
+        "categories": ["business"],
+        "active": true
+      }
+    ]
+  },
+  "tamil": {
+    "politics": [
+      {
+        "name": "Dinamalar Politics",
+        "url": "https://www.dinamalar.com",
+        "rssUrls": ["https://www.dinamalar.com/rss/politics.xml"],
+        "language": "ta",
+        "categories": ["politics"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Dinamalar Sports",
+        "url": "https://www.dinamalar.com",
+        "rssUrls": ["https://www.dinamalar.com/rss/sports.xml"],
+        "language": "ta",
+        "categories": ["sports"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Dinamalar Entertainment",
+        "url": "https://www.dinamalar.com",
+        "rssUrls": ["https://www.dinamalar.com/rss/entertainment.xml"],
+        "language": "ta",
+        "categories": ["entertainment"],
+        "active": true
+      }
+    ]
+  },
+  "marathi": {
+    "politics": [
+      {
+        "name": "Lokmat Politics",
+        "url": "https://www.lokmat.com",
+        "rssUrls": ["https://www.lokmat.com/rss/politics.xml"],
+        "language": "mr",
+        "categories": ["politics"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Lokmat Sports",
+        "url": "https://www.lokmat.com",
+        "rssUrls": ["https://www.lokmat.com/rss/sports.xml"],
+        "language": "mr",
+        "categories": ["sports"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Lokmat Entertainment",
+        "url": "https://www.lokmat.com",
+        "rssUrls": ["https://www.lokmat.com/rss/entertainment.xml"],
+        "language": "mr",
+        "categories": ["entertainment"],
+        "active": true
+      }
+    ]
+  },
+  "bengali": {
+    "politics": [
+      {
+        "name": "Anandabazar Politics",
+        "url": "https://www.anandabazar.com",
+        "rssUrls": ["https://www.anandabazar.com/rss/politics.xml"],
+        "language": "bn",
+        "categories": ["politics"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Anandabazar Sports",
+        "url": "https://www.anandabazar.com",
+        "rssUrls": ["https://www.anandabazar.com/rss/sports.xml"],
+        "language": "bn",
+        "categories": ["sports"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Anandabazar Entertainment",
+        "url": "https://www.anandabazar.com",
+        "rssUrls": ["https://www.anandabazar.com/rss/entertainment.xml"],
+        "language": "bn",
+        "categories": ["entertainment"],
+        "active": true
+      }
+    ]
+  },
+  "gujarati": {
+    "politics": [
+      {
+        "name": "Gujarat Samachar Politics",
+        "url": "https://www.gujaratsamachar.com",
+        "rssUrls": ["https://www.gujaratsamachar.com/rss/politics.xml"],
+        "language": "gu",
+        "categories": ["politics"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Gujarat Samachar Sports",
+        "url": "https://www.gujaratsamachar.com",
+        "rssUrls": ["https://www.gujaratsamachar.com/rss/sports.xml"],
+        "language": "gu",
+        "categories": ["sports"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Gujarat Samachar Entertainment",
+        "url": "https://www.gujaratsamachar.com",
+        "rssUrls": ["https://www.gujaratsamachar.com/rss/entertainment.xml"],
+        "language": "gu",
+        "categories": ["entertainment"],
+        "active": true
+      }
+    ]
+  }
+}

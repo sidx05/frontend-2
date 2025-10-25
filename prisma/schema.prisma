@@ -1,0 +1,41 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Source {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  url         String
+  rssUrls     String[]
+  active      Boolean  @default(true)
+  categories  String[]
+  lang        String   @default("en")
+  lastScraped DateTime?
+}
+
+model Subscriber {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  email        String   @unique
+  name         String
+  preferences  Json
+  active       Boolean  @default(true)
+  subscribedAt DateTime @default(now())
+  lastSent     DateTime?
+}
+
+model Article {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  summary   String
+  content   String?
+  url       String?
+  hash      String   @unique
+  category  String?
+  image     String?   // <-- added field for images
+  published DateTime @default(now())
+}
