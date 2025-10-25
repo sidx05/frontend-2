@@ -33,7 +33,7 @@ jobs:
       run: npm run lint
 
     - name: Run TypeScript check
-      run: npm run type-check
+      run: npx tsc --noEmit --project tsconfig.frontend.json
 
     - name: Run frontend tests
       run: npm test
