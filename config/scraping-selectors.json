@@ -1,0 +1,250 @@
+{
+  "sites": {
+    "https://www.eenadu.net": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.article-title, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".publish-date, .date, time, .timestamp",
+        "thumbnail": "img.article-image, .featured-image img, .hero-image img",
+        "author": ".author-name, .byline, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "telugu",
+      "categories": ["general"]
+    },
+    "https://www.sakshi.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.article-title, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".publish-date, .date, time, .timestamp",
+        "thumbnail": "img.article-image, .featured-image img, .hero-image img",
+        "author": ".author-name, .byline, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "telugu",
+      "categories": ["general"]
+    },
+    "https://www.aajtak.in": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.article-title, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".publish-date, .date, time, .timestamp",
+        "thumbnail": "img.article-image, .featured-image img, .hero-image img",
+        "author": ".author-name, .byline, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "hindi",
+      "categories": ["general"]
+    },
+    "https://zeenews.india.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.article-title, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".publish-date, .date, time, .timestamp",
+        "thumbnail": "img.article-image, .featured-image img, .hero-image img",
+        "author": ".author-name, .byline, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "hindi",
+      "categories": ["general"]
+    },
+    "https://timesofindia.indiatimes.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1._23498, ._1Y-96, h1",
+        "content": ".ga-headlines, ._3YYSt, .content, p",
+        "date": "._3Mkg- ._3-1X, ._3Mkg- ._3-1X, time",
+        "thumbnail": "img._3HgAp, ._3HgAp img, .hero-image img",
+        "author": "._3Mkg- ._3-1X, .author, .byline",
+        "summary": "._3YYSt ._3YYSt, .excerpt, .lead"
+      },
+      "language": "english",
+      "categories": ["general"]
+    },
+    "https://www.hindustantimes.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.hdg1, .headline, h1",
+        "content": ".story-content, .content, p",
+        "date": ".dateTime, .publish-date, time",
+        "thumbnail": "img.hero-image, .featured-image img, .hero-image img",
+        "author": ".author, .byline, .writer",
+        "summary": ".excerpt, .lead, .summary"
+      },
+      "language": "english",
+      "categories": ["general"]
+    },
+    "https://www.dinamalar.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.article-title, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".publish-date, .date, time, .timestamp",
+        "thumbnail": "img.article-image, .featured-image img, .hero-image img",
+        "author": ".author-name, .byline, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "tamil",
+      "categories": ["general"]
+    },
+    "https://www.anandabazar.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.article-title, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".publish-date, .date, time, .timestamp",
+        "thumbnail": "img.article-image, .featured-image img, .hero-image img",
+        "author": ".author-name, .byline, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "bengali",
+      "categories": ["general"]
+    },
+    "https://eisamay.indiatimes.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.article-title, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".publish-date, .date, time, .timestamp",
+        "thumbnail": "img.article-image, .featured-image img, .hero-image img",
+        "author": ".author-name, .byline, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "bengali",
+      "categories": ["general"]
+    },
+    "https://www.loksatta.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.article-title, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".publish-date, .date, time, .timestamp",
+        "thumbnail": "img.article-image, .featured-image img, .hero-image img",
+        "author": ".author-name, .byline, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "marathi",
+      "categories": ["general"]
+    },
+    "https://maharashtratimes.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.article-title, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".publish-date, .date, time, .timestamp",
+        "thumbnail": "img.article-image, .featured-image img, .hero-image img",
+        "author": ".author-name, .byline, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "marathi",
+      "categories": ["general"]
+    },
+    "https://www.sandesh.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.article-title, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".publish-date, .date, time, .timestamp",
+        "thumbnail": "img.article-image, .featured-image img, .hero-image img",
+        "author": ".author-name, .byline, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "gujarati",
+      "categories": ["general"]
+    },
+    "https://www.divyabhaskar.co.in": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.article-title, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".publish-date, .date, time, .timestamp",
+        "thumbnail": "img.article-image, .featured-image img, .hero-image img",
+        "author": ".author-name, .byline, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "gujarati",
+      "categories": ["general"]
+    },
+    "https://www.bhaskar.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.article-title, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".publish-date, .date, time, .timestamp",
+        "thumbnail": "img.article-image, .featured-image img, .hero-image img",
+        "author": ".author-name, .byline, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "hindi",
+      "categories": ["general"]
+    },
+    "https://navbharattimes.indiatimes.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.article-title, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".publish-date, .date, time, .timestamp",
+        "thumbnail": "img.article-image, .featured-image img, .hero-image img",
+        "author": ".author-name, .byline, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "hindi",
+      "categories": ["general"]
+    },
+    "https://www.bbc.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.story-headline, .headline, h1",
+        "content": ".story-body, .content, p",
+        "date": ".date, .timestamp, time",
+        "thumbnail": "img.media__image, .featured-image img, .hero-image img",
+        "author": ".byline, .author, .writer",
+        "summary": ".story-intro, .excerpt, .lead"
+      },
+      "language": "english",
+      "categories": ["general"]
+    },
+    "https://www.cnn.com": {
+      "type": "css",
+      "selectors": {
+        "title": "h1.headline, .headline, h1",
+        "content": ".article-content, .story-content, .content, p",
+        "date": ".update-time, .date, time",
+        "thumbnail": "img.media__image, .featured-image img, .hero-image img",
+        "author": ".byline, .author, .writer",
+        "summary": ".article-summary, .excerpt, .lead"
+      },
+      "language": "english",
+      "categories": ["general"]
+    }
+  },
+  "fallback_selectors": {
+    "title": "h1, .headline, .title, .article-title",
+    "content": ".content, .article-content, .story-content, .post-content, p",
+    "date": ".date, .publish-date, .timestamp, time, .published",
+    "thumbnail": "img, .featured-image img, .hero-image img, .article-image img",
+    "author": ".author, .byline, .writer, .author-name",
+    "summary": ".summary, .excerpt, .lead, .article-summary"
+  },
+  "common_patterns": {
+    "date_formats": [
+      "YYYY-MM-DD",
+      "DD/MM/YYYY",
+      "MM/DD/YYYY",
+      "DD-MM-YYYY",
+      "MM-DD-YYYY",
+      "DD MMM YYYY",
+      "MMM DD, YYYY"
+    ],
+    "time_formats": [
+      "HH:mm:ss",
+      "HH:mm",
+      "h:mm A",
+      "h:mm:ss A"
+    ]
+  }
+}

@@ -1,0 +1,544 @@
+{
+  "telugu": {
+    "general": [
+      {
+        "name": "Eenadu News",
+        "url": "https://www.eenadu.net",
+        "rssUrl": "https://www.eenadu.net/rss.xml",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "Sakshi News",
+        "url": "https://www.sakshi.com",
+        "rssUrl": "https://www.sakshi.com/rss.xml",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "Andhra Jyothy",
+        "url": "https://www.andhrajyothy.com",
+        "rssUrl": "https://www.andhrajyothy.com/rss.xml",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "TV9 Telugu",
+        "url": "https://tv9telugu.com",
+        "rssUrl": "https://tv9telugu.com/feed/",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "ABN Telugu",
+        "url": "https://www.abntelugu.com",
+        "rssUrl": "https://www.abntelugu.com/feed/",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Eenadu Entertainment",
+        "url": "https://www.eenadu.net",
+        "rssUrl": "https://www.eenadu.net/rss/entertainment.xml",
+        "type": "rss",
+        "categories": ["entertainment", "movies"],
+        "active": true
+      },
+      {
+        "name": "Sakshi Entertainment",
+        "url": "https://www.sakshi.com",
+        "rssUrl": "https://www.sakshi.com/rss/entertainment.xml",
+        "type": "rss",
+        "categories": ["entertainment", "movies"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Eenadu Sports",
+        "url": "https://www.eenadu.net",
+        "rssUrl": "https://www.eenadu.net/rss/sports.xml",
+        "type": "rss",
+        "categories": ["sports", "cricket"],
+        "active": true
+      },
+      {
+        "name": "Andhra Jyothy Sports",
+        "url": "https://www.andhrajyothy.com",
+        "rssUrl": "https://www.andhrajyothy.com/rss/sports.xml",
+        "type": "rss",
+        "categories": ["sports", "cricket"],
+        "active": true
+      }
+    ],
+    "politics": [
+      {
+        "name": "Eenadu Politics",
+        "url": "https://www.eenadu.net",
+        "rssUrl": "https://www.eenadu.net/rss/politics.xml",
+        "type": "rss",
+        "categories": ["politics", "government"],
+        "active": true
+      },
+      {
+        "name": "Sakshi Politics",
+        "url": "https://www.sakshi.com",
+        "rssUrl": "https://www.sakshi.com/rss/politics.xml",
+        "type": "rss",
+        "categories": ["politics", "government"],
+        "active": true
+      }
+    ],
+    "business": [
+      {
+        "name": "Eenadu Business",
+        "url": "https://www.eenadu.net",
+        "rssUrl": "https://www.eenadu.net/rss/business.xml",
+        "type": "rss",
+        "categories": ["business", "economy"],
+        "active": true
+      }
+    ]
+  },
+  "hindi": {
+    "general": [
+      {
+        "name": "Dainik Bhaskar",
+        "url": "https://www.bhaskar.com",
+        "rssUrl": "https://www.bhaskar.com/rss-feed/2322/",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "Navbharat Times",
+        "url": "https://navbharattimes.indiatimes.com",
+        "rssUrl": "https://navbharattimes.indiatimes.com/rssfeeds/2279796.cms",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "Aaj Tak",
+        "url": "https://www.aajtak.in",
+        "rssUrl": "https://www.aajtak.in/rss.xml",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "Zee News",
+        "url": "https://zeenews.india.com",
+        "rssUrl": "https://zeenews.india.com/rss.xml",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "NDTV Hindi",
+        "url": "https://khabar.ndtv.com",
+        "rssUrl": "https://khabar.ndtv.com/feeds/latest/",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "Amar Ujala",
+        "url": "https://www.amarujala.com",
+        "rssUrl": "https://www.amarujala.com/rss.xml",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      }
+    ],
+    "politics": [
+      {
+        "name": "Aaj Tak Politics",
+        "url": "https://www.aajtak.in",
+        "rssUrl": "https://www.aajtak.in/rss/politics.xml",
+        "type": "rss",
+        "categories": ["politics", "government"],
+        "active": true
+      },
+      {
+        "name": "Zee News Politics",
+        "url": "https://zeenews.india.com",
+        "rssUrl": "https://zeenews.india.com/rss/politics.xml",
+        "type": "rss",
+        "categories": ["politics", "government"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Aaj Tak Entertainment",
+        "url": "https://www.aajtak.in",
+        "rssUrl": "https://www.aajtak.in/rss/entertainment.xml",
+        "type": "rss",
+        "categories": ["entertainment", "movies", "bollywood"],
+        "active": true
+      },
+      {
+        "name": "Zee News Entertainment",
+        "url": "https://zeenews.india.com",
+        "rssUrl": "https://zeenews.india.com/rss/entertainment.xml",
+        "type": "rss",
+        "categories": ["entertainment", "movies", "bollywood"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Aaj Tak Sports",
+        "url": "https://www.aajtak.in",
+        "rssUrl": "https://www.aajtak.in/rss/sports.xml",
+        "type": "rss",
+        "categories": ["sports", "cricket"],
+        "active": true
+      }
+    ],
+    "business": [
+      {
+        "name": "Aaj Tak Business",
+        "url": "https://www.aajtak.in",
+        "rssUrl": "https://www.aajtak.in/rss/business.xml",
+        "type": "rss",
+        "categories": ["business", "economy"],
+        "active": true
+      }
+    ]
+  },
+  "english": {
+    "general": [
+      {
+        "name": "BBC News",
+        "url": "https://www.bbc.com",
+        "rssUrl": "https://feeds.bbci.co.uk/news/world/rss.xml",
+        "type": "rss",
+        "categories": ["general", "world"],
+        "active": true
+      },
+      {
+        "name": "Associated Press",
+        "url": "https://apnews.com",
+        "rssUrl": "https://feeds.apnews.com/rss/ap/topnews",
+        "type": "rss",
+        "categories": ["general", "world"],
+        "active": true
+      },
+      {
+        "name": "Times of India",
+        "url": "https://timesofindia.indiatimes.com",
+        "rssUrl": "https://timesofindia.indiatimes.com/rssfeeds/296589292.cms",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "Hindustan Times",
+        "url": "https://www.hindustantimes.com",
+        "rssUrl": "https://www.hindustantimes.com/rss/politics/rssfeed.xml",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "NDTV News",
+        "url": "https://www.ndtv.com",
+        "rssUrl": "https://feeds.feedburner.com/ndtvnews-top-stories",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      }
+    ],
+    "politics": [
+      {
+        "name": "Times of India Politics",
+        "url": "https://timesofindia.indiatimes.com",
+        "rssUrl": "https://timesofindia.indiatimes.com/rssfeeds/296589292.cms",
+        "type": "rss",
+        "categories": ["politics", "government"],
+        "active": true
+      },
+      {
+        "name": "Hindustan Times Politics",
+        "url": "https://www.hindustantimes.com",
+        "rssUrl": "https://www.hindustantimes.com/rss/politics/rssfeed.xml",
+        "type": "rss",
+        "categories": ["politics", "government"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Times of India Entertainment",
+        "url": "https://timesofindia.indiatimes.com",
+        "rssUrl": "https://timesofindia.indiatimes.com/rssfeeds/1081479906.cms",
+        "type": "rss",
+        "categories": ["entertainment", "movies", "bollywood"],
+        "active": true
+      },
+      {
+        "name": "Hindustan Times Entertainment",
+        "url": "https://www.hindustantimes.com",
+        "rssUrl": "https://www.hindustantimes.com/rss/entertainment/rssfeed.xml",
+        "type": "rss",
+        "categories": ["entertainment", "movies", "bollywood"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Times of India Sports",
+        "url": "https://timesofindia.indiatimes.com",
+        "rssUrl": "https://timesofindia.indiatimes.com/rssfeeds/4719148.cms",
+        "type": "rss",
+        "categories": ["sports", "cricket"],
+        "active": true
+      },
+      {
+        "name": "ESPN Cricinfo",
+        "url": "https://www.espncricinfo.com",
+        "rssUrl": "https://www.espncricinfo.com/rss/content/story/feeds/6.xml",
+        "type": "rss",
+        "categories": ["sports", "cricket"],
+        "active": true
+      }
+    ],
+    "business": [
+      {
+        "name": "Times of India Business",
+        "url": "https://timesofindia.indiatimes.com",
+        "rssUrl": "https://timesofindia.indiatimes.com/rssfeeds/1898055.cms",
+        "type": "rss",
+        "categories": ["business", "economy"],
+        "active": true
+      },
+      {
+        "name": "Economic Times",
+        "url": "https://economictimes.indiatimes.com",
+        "rssUrl": "https://economictimes.indiatimes.com/rssfeedsdefault.cms",
+        "type": "rss",
+        "categories": ["business", "economy"],
+        "active": true
+      }
+    ],
+    "technology": [
+      {
+        "name": "Times of India Technology",
+        "url": "https://timesofindia.indiatimes.com",
+        "rssUrl": "https://timesofindia.indiatimes.com/rssfeeds/66949542.cms",
+        "type": "rss",
+        "categories": ["technology", "gadgets"],
+        "active": true
+      }
+    ]
+  },
+  "tamil": {
+    "general": [
+      {
+        "name": "Dinamalar",
+        "url": "https://www.dinamalar.com",
+        "rssUrl": "https://www.dinamalar.com/rss.xml",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "The Hindu Tamil",
+        "url": "https://www.thehindu.com",
+        "rssUrl": "https://www.thehindu.com/feeder/default.rss",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      }
+    ],
+    "politics": [
+      {
+        "name": "Dinamalar Politics",
+        "url": "https://www.dinamalar.com",
+        "rssUrl": "https://www.dinamalar.com/rss/politics.xml",
+        "type": "rss",
+        "categories": ["politics", "government"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Dinamalar Entertainment",
+        "url": "https://www.dinamalar.com",
+        "rssUrl": "https://www.dinamalar.com/rss/entertainment.xml",
+        "type": "rss",
+        "categories": ["entertainment", "movies", "kollywood"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Dinamalar Sports",
+        "url": "https://www.dinamalar.com",
+        "rssUrl": "https://www.dinamalar.com/rss/sports.xml",
+        "type": "rss",
+        "categories": ["sports", "cricket"],
+        "active": true
+      }
+    ]
+  },
+  "bengali": {
+    "general": [
+      {
+        "name": "Anandabazar Patrika",
+        "url": "https://www.anandabazar.com",
+        "rssUrl": "https://www.anandabazar.com/rss",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "Ei Samay",
+        "url": "https://eisamay.indiatimes.com",
+        "rssUrl": "https://eisamay.indiatimes.com/rssfeedstopstories.cms",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      }
+    ],
+    "politics": [
+      {
+        "name": "Anandabazar Politics",
+        "url": "https://www.anandabazar.com",
+        "rssUrl": "https://www.anandabazar.com/rss/politics",
+        "type": "rss",
+        "categories": ["politics", "government"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Anandabazar Entertainment",
+        "url": "https://www.anandabazar.com",
+        "rssUrl": "https://www.anandabazar.com/rss/entertainment",
+        "type": "rss",
+        "categories": ["entertainment", "movies", "tollywood"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Anandabazar Sports",
+        "url": "https://www.anandabazar.com",
+        "rssUrl": "https://www.anandabazar.com/rss/sports",
+        "type": "rss",
+        "categories": ["sports", "cricket"],
+        "active": true
+      }
+    ]
+  },
+  "marathi": {
+    "general": [
+      {
+        "name": "Loksatta",
+        "url": "https://www.loksatta.com",
+        "rssUrl": "https://www.loksatta.com/rss",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "Maharashtra Times",
+        "url": "https://maharashtratimes.com",
+        "rssUrl": "https://maharashtratimes.com/rss/section/2.cms",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      }
+    ],
+    "politics": [
+      {
+        "name": "Loksatta Politics",
+        "url": "https://www.loksatta.com",
+        "rssUrl": "https://www.loksatta.com/rss/politics",
+        "type": "rss",
+        "categories": ["politics", "government"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Loksatta Entertainment",
+        "url": "https://www.loksatta.com",
+        "rssUrl": "https://www.loksatta.com/rss/entertainment",
+        "type": "rss",
+        "categories": ["entertainment", "movies", "marathi"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Loksatta Sports",
+        "url": "https://www.loksatta.com",
+        "rssUrl": "https://www.loksatta.com/rss/sports",
+        "type": "rss",
+        "categories": ["sports", "cricket"],
+        "active": true
+      }
+    ]
+  },
+  "gujarati": {
+    "general": [
+      {
+        "name": "Sandesh",
+        "url": "https://www.sandesh.com",
+        "rssUrl": "https://www.sandesh.com/rss",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      },
+      {
+        "name": "Divya Bhaskar",
+        "url": "https://www.divyabhaskar.co.in",
+        "rssUrl": "https://www.divyabhaskar.co.in/rss",
+        "type": "rss",
+        "categories": ["general", "news"],
+        "active": true
+      }
+    ],
+    "politics": [
+      {
+        "name": "Sandesh Politics",
+        "url": "https://www.sandesh.com",
+        "rssUrl": "https://www.sandesh.com/rss/politics",
+        "type": "rss",
+        "categories": ["politics", "government"],
+        "active": true
+      }
+    ],
+    "entertainment": [
+      {
+        "name": "Sandesh Entertainment",
+        "url": "https://www.sandesh.com",
+        "rssUrl": "https://www.sandesh.com/rss/entertainment",
+        "type": "rss",
+        "categories": ["entertainment", "movies", "gujarati"],
+        "active": true
+      }
+    ],
+    "sports": [
+      {
+        "name": "Sandesh Sports",
+        "url": "https://www.sandesh.com",
+        "rssUrl": "https://www.sandesh.com/rss/sports",
+        "type": "rss",
+        "categories": ["sports", "cricket"],
+        "active": true
+      }
+    ]
+  }
+}

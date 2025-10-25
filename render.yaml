@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: newshub-backend
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: "npm ci && npm run build"
+    startCommand: "npm start"
+    envVars:
+      # Define runtime env var names here as placeholders; set the actual values in Render dashboard
+      - key: MONGODB_URI
+        value: ""
+      - key: REDIS_URL
+        value: ""
+      - key: JWT_SECRET
+        value: ""
+      - key: NODE_ENV
+        value: "production"
