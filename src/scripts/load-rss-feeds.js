@@ -1,7 +1,7 @@
 // Script to load RSS feeds from configuration
 // Run this with: node src/scripts/load-rss-feeds.js
 
-const fetch = require('node-fetch');
+// Use the global fetch available in Node 18+. Remove require() to satisfy ESLint rules.
 
 async function loadRSSFeeds() {
   try {
