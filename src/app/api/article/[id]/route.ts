@@ -50,6 +50,11 @@ export async function GET(
       summary: sanitizeText(article.summary),
       content: sanitizeText(article.content),
       thumbnail: article.thumbnail || article.image,
+      // Normalize images from backend: support multiple possible field names
+      images: (article.images || article.imagesArray || article.media || []).map((img: any) => ({
+        url: img?.url || img?.image || img?.src || img?.thumbnail || '',
+        alt: img?.alt || img?.caption || img?.title || ''
+      })),
       source: {
         name: article.source?.sourceId?.name || article.source?.name || 'Unknown',
         url: article.source?.url || '',
