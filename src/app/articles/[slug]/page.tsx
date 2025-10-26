@@ -18,7 +18,8 @@ export default async function ArticlePage({ params }: { params: any }) {
   // Next.js can pass `params` as a promise in some runtimes — await to be safe
   const { slug } = (await params) as { slug: string };
   const API_HOST = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3001";
-  const url = `${API_HOST}/api/articles/${encodeURIComponent(slug)}`; // public article endpoint
+  // Backend public slug endpoint
+  const url = `${API_HOST}/api/public/articles/${encodeURIComponent(slug)}`;
 
   try {
     const res = await fetch(url, { cache: "no-store" });

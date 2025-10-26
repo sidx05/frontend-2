@@ -11,7 +11,8 @@ function sanitizeText(text: string | undefined | null): string {
 }
 
 async function getArticles() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/public/articles`, {
+  const API_HOST = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
+  const res = await fetch(`${API_HOST}/api/public/articles`, {
     cache: "no-store",
   })
 
@@ -20,7 +21,8 @@ async function getArticles() {
   }
 
   const data = await res.json()
-  return data?.data || [] // adjust based on API response
+  // backend returns { success, data: { articles: [], pagination: {...} } }
+  return Array.isArray(data?.data?.articles) ? data.data.articles : []
 }
 
 export default async function ArticlesPage() {
@@ -32,7 +34,7 @@ export default async function ArticlesPage() {
 
       <ul className="space-y-4">
         {articles.map((article: any) => (
-          <li key={article.id} className="p-4 border rounded-lg shadow-sm hover:shadow-md">
+          <li key={article._id || article.id} className="p-4 border rounded-lg shadow-sm hover:shadow-md">
             <Link href={`/articles/${article.slug}`}>
               <h2 className="text-xl font-semibold">{sanitizeText(article.title)}</h2>
               <p className="text-gray-600">{sanitizeText(article.summary)}</p>

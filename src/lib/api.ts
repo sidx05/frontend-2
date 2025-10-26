@@ -1,6 +1,7 @@
 // src/lib/api.ts
 const API_HOST = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
-const PUBLIC_BASE = `${API_HOST}/api`; // Backend routes are mounted at /api
+// Backend public routes are mounted under /api/public/* in the server
+const PUBLIC_BASE = `${API_HOST}/api/public`;
 
 async function safeJson(res: Response) {
   let json: any = null;
@@ -33,7 +34,7 @@ export async function fetchCategoryBySlug(slug: string) {
 
 
 export async function fetchCategories() {
-  const res = await fetch(`${PUBLIC_BASE}/categories`, { cache: "no-store" });
+  const res = await fetch(`${API_HOST}/api/categories`, { cache: "no-store" });
   const json = await safeJson(res);
   return normalizeArrayResponse(json);
 }
@@ -44,7 +45,8 @@ export async function fetchCategories() {
  * Returns an array (possibly empty).
  */
 export async function fetchArticles(options?: Record<string, any>) {
-  const url = new URL(`${PUBLIC_BASE}/news`);
+  // Backend endpoint: GET /api/public/articles with optional query params
+  const url = new URL(`${PUBLIC_BASE}/articles`);
   if (options) {
     Object.entries(options).forEach(([k, v]) => {
       if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
@@ -57,6 +59,7 @@ export async function fetchArticles(options?: Record<string, any>) {
 
 export async function fetchArticleBySlug(slug: string) {
   if (!slug) throw new Error("Missing slug");
+  // Backend endpoint: GET /api/public/articles/:slug
   const res = await fetch(`${PUBLIC_BASE}/articles/${encodeURIComponent(slug)}`, {
     cache: "no-store",
   });
@@ -65,13 +68,13 @@ export async function fetchArticleBySlug(slug: string) {
 }
 
 export async function fetchTrending() {
-  const res = await fetch(`${PUBLIC_BASE}/trending`, { cache: "no-store" });
+  const res = await fetch(`${API_HOST}/api/trending`, { cache: "no-store" });
   const json = await safeJson(res);
   return json ?? {};
 }
 
 export async function fetchActiveTickers() {
-  const res = await fetch(`${PUBLIC_BASE}/ticker/active`, { cache: "no-store" });
+  const res = await fetch(`${API_HOST}/api/ticker/active`, { cache: "no-store" });
   const json = await safeJson(res);
   return json?.data ?? json ?? [];
 }
