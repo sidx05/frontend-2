@@ -28,7 +28,7 @@ declare module 'mongoose' {
 					pre(hook: string, fn: (...args: any[]) => any): void;
 			}
 
-			export interface Model<T = any> {}
+			export interface Model<T = any> { [key: string]: any }
 
 			export function model<T = any>(name: string, schema?: Schema<T>): Model<T>;
 
