@@ -10,7 +10,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "next-themes";
 import { fetchCategories } from "@/lib/api";
 import Ticker from "@/components/ticker/Ticker";
-import LanguageNav from "@/components/layout/LanguageNav";
 // BrandWireLink removed per request; using a simple category link instead
 import { cn } from "@/lib/utils";
 
@@ -60,13 +59,11 @@ export function Navbar() {
                 NewsHub
               </span>
             </Link>
-            {/* Brand Wire + Languages (modular) */}
+            {/* Brand Wire */}
             <div className="hidden md:flex items-center gap-3 ml-6 text-sm">
               <Link href="/brand-wire" className="font-semibold hover:underline">
                 Brand Wire
               </Link>
-              <span className="text-muted-foreground">|</span>
-              <LanguageNav />
             </div>
           </div>
 
