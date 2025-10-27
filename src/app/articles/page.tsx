@@ -12,24 +12,41 @@ function sanitizeText(text: string | undefined | null): string {
 
 async function getArticles() {
   const API_HOST = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
+  const url = `${API_HOST}/api/public/articles?limit=50`
   
   try {
-    const res = await fetch(`${API_HOST}/api/public/articles?limit=50`, {
+    console.log('[Articles Page] Fetching from:', url)
+    const res = await fetch(url, {
       cache: "no-store",
+      headers: {
+        'Content-Type': 'application/json',
+      }
     })
 
+    console.log('[Articles Page] Response status:', res.status, res.ok)
+
     if (!res.ok) {
-      console.error(`Articles fetch failed: ${res.status} ${res.statusText}`)
+      const errorText = await res.text()
+      console.error(`[Articles Page] Fetch failed:`, { status: res.status, statusText: res.statusText, body: errorText.substring(0, 200) })
       return []
     }
 
     const data = await res.json()
-    console.log('Articles response:', { success: data.success, count: data?.data?.articles?.length })
+    console.log('[Articles Page] Response structure:', {
+      success: data.success,
+      hasData: !!data.data,
+      hasArticles: !!data?.data?.articles,
+      articlesIsArray: Array.isArray(data?.data?.articles),
+      count: data?.data?.articles?.length,
+      pagination: data?.data?.pagination
+    })
     
     // backend returns { success, data: { articles: [], pagination: {...} } }
-    return Array.isArray(data?.data?.articles) ? data.data.articles : []
+    const articles = Array.isArray(data?.data?.articles) ? data.data.articles : []
+    console.log('[Articles Page] Returning:', articles.length, 'articles')
+    return articles
   } catch (error) {
-    console.error('Error fetching articles:', error)
+    console.error('[Articles Page] Error:', error)
     return []
   }
 }
