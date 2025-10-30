@@ -37,7 +37,8 @@ export default function HomePage() {
   const [latestNewsLoading, setLatestNewsLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [quickReads, setQuickReads] = useState<any[]>([]);
-  const [popularCategories, setPopularCategories] = useState<any[]>([]);  
+  const [popularCategories, setPopularCategories] = useState<any[]>([]);
+  const [moreStories, setMoreStories] = useState<any[]>([]);  
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -145,7 +146,7 @@ export default function HomePage() {
         const languagePromises = languages.map(async (lang) => {
           try {
             const [langArticles, categories] = await Promise.all([
-              fetch(`/api/news/latest?lang=${lang}&limit=6`).then(res => res.json()),
+              fetch(`/api/news/latest?lang=${lang}&limit=20`).then(res => res.json()),
               fetch(`/api/categories?lang=${lang}`).then(res => res.json())
             ]);
             
@@ -205,6 +206,18 @@ export default function HomePage() {
           .map(([name, count]) => ({ name, count }));
         
         if (mounted) setPopularCategories(topCategories);
+        
+        // Get articles without images for "More Stories" section
+        const articlesWithoutImages: any[] = [];
+        validResults.forEach((section: any) => {
+          section.articles.forEach((article: any) => {
+            if (!article.thumbnail && !article.image) {
+              articlesWithoutImages.push(article);
+            }
+          });
+        });
+        
+        if (mounted) setMoreStories(articlesWithoutImages.slice(0, 8));
 
       } catch (err) {
         console.error("Error fetching articles:", err);
@@ -655,8 +668,8 @@ export default function HomePage() {
                 </Card>
               </motion.div>
 
-              {/* Other Stories - Modern Redesign */}
-              {uncategorizedArticles.length > 0 && (
+              {/* More Stories - Articles without images (like in the screenshot) */}
+              {moreStories.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -666,15 +679,16 @@ export default function HomePage() {
                     <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 px-6 py-4 border-b border-border/50">
                       <div className="flex items-center gap-3">
                         <div className="p-2 rounded-lg bg-primary/10 backdrop-blur-sm">
-                          <Bookmark className="h-5 w-5 text-primary" />
+                          <TrendingUp className="h-5 w-5 text-primary" />
                         </div>
-                        <h3 className="text-lg font-bold text-foreground">Other Stories</h3>
+                        <h3 className="text-lg font-bold text-foreground">More Stories</h3>
+                        <Badge variant="secondary" className="ml-auto text-xs">No images</Badge>
                       </div>
                     </div>
-                    <CardContent className="p-4 space-y-3">
-                      {uncategorizedArticles.slice(0, 4).map((article: any, index: number) => (
+                    <CardContent className="p-4 space-y-1">
+                      {moreStories.slice(0, 6).map((article: any, index: number) => (
                         <motion.div
-                          key={`home-uncategorized-${article.id || `fallback-${index}`}-${index}`}
+                          key={`more-story-${article.id || `fallback-${index}`}`}
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.3, delay: index * 0.05 }}
@@ -683,33 +697,25 @@ export default function HomePage() {
                             href={`/article/${article.slug}`}
                             className="block group"
                           >
-                            <div className="flex gap-3 p-2.5 rounded-lg hover:bg-accent/50 transition-all duration-200">
-                              {article.thumbnail && (
-                                <div className="flex-shrink-0 w-16 h-16 rounded-md overflow-hidden bg-muted">
-                                  <img 
-                                    src={article.thumbnail} 
-                                    alt={article.title}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                  />
-                                </div>
-                              )}
-                              <div className="flex-1 min-w-0">
-                                <h4 className="text-sm font-semibold line-clamp-2 group-hover:text-primary transition-colors leading-snug mb-1.5">
-                                  {article.title}
-                                </h4>
-                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                                  <Clock className="h-3 w-3" />
-                                  <span>{article.time}</span>
-                                </div>
+                            <div className="p-3 rounded-lg hover:bg-accent/50 transition-all duration-200 border-b border-border/30 last:border-0">
+                              <h4 className="text-sm font-semibold line-clamp-2 group-hover:text-primary transition-colors leading-snug mb-2">
+                                {article.title}
+                              </h4>
+                              <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mb-2">
+                                {article.summary}
+                              </p>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <Clock className="h-3 w-3" />
+                                <span>{article.time}</span>
                               </div>
                             </div>
                           </Link>
                         </motion.div>
                       ))}
-                      {uncategorizedArticles.length > 4 && (
-                        <div className="pt-3 border-t border-border/50 mt-3">
+                      {moreStories.length > 6 && (
+                        <div className="pt-3 border-t border-border/50 mt-2">
                           <Link 
-                            href="/news?category=uncategorized"
+                            href="/news"
                             className="flex items-center justify-between text-sm text-primary hover:text-primary/80 font-medium transition-colors py-2 px-3 rounded-lg hover:bg-primary/5 group"
                           >
                             <span>View all stories</span>

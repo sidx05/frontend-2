@@ -114,11 +114,10 @@ function NewsPageContent() {
     try {
       const params = new URLSearchParams({
         page: currentPage.toString(),
+        limit: '30', // Set explicit limit for more articles per page
         sortBy: sortBy === 'latest' ? 'publishedAt' : 'viewCount',
         sortOrder: 'desc'
       });
-      
-      // Don't set limit - let the API use the settings default
 
       // Only add language parameter if it's not 'all'
       if (language !== 'all') {
