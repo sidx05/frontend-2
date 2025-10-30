@@ -45,31 +45,32 @@ export default function HomePage() {
     return () => clearInterval(t);
   }, [featuredArticles.length]);
 
+  // Fetch RSS Latest News
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const response = await fetch('/api/rss/latest');
+        const data = await response.json();
+        if (mounted && data.success && data.items) {
+          setRssLatestNews(data.items);
+        }
+      } catch (error) {
+        console.error('Error fetching RSS feed:', error);
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
   useEffect(() => {
     let mounted = true;
     (async () => {
       try {
         // Fetch only essential data in parallel for faster initial load
-        const [rawArticles, trendingData, rssData] = await Promise.all([
+        const [rawArticles, trendingData] = await Promise.all([
           fetchArticles({ lang: 'en', limit: 12 }), // Limit initial fetch
-          fetchTrending().catch(() => []),
-          fetch('https://www.thehindu.com/news/national/?service=rss')
-            .then(res => res.text())
-            .then(xml => {
-              const parser = new DOMParser();
-              const doc = parser.parseFromString(xml, 'text/xml');
-              const items = Array.from(doc.querySelectorAll('item')).slice(0, 10);
-              return items.map(item => ({
-                title: item.querySelector('title')?.textContent || '',
-                link: item.querySelector('link')?.textContent || '',
-                pubDate: item.querySelector('pubDate')?.textContent || '',
-                description: item.querySelector('description')?.textContent || ''
-              }));
-            })
-            .catch(() => [])
+          fetchTrending().catch(() => [])
         ]);
-        
-        if (mounted) setRssLatestNews(rssData);
         
         const articlesList = Array.isArray(rawArticles) ? rawArticles : [];
 
@@ -352,7 +353,7 @@ export default function HomePage() {
       <main className="pt-32 pb-16">
         <div className="container mx-auto px-4">
           {/* Welcome Banner - Reduced Height */}
-          <section className="mb-8">
+          <section className="mb-6">
             <div className="relative h-48 md:h-64 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white">
               <div className="text-center p-8">
                 <h1 className="text-3xl md:text-4xl font-bold mb-4">Welcome to NewsHub</h1>
@@ -364,34 +365,38 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* Latest News - Sliding RSS Feed */}
+          {/* Latest News - Sliding RSS Feed Banner */}
           {rssLatestNews.length > 0 && (
             <section className="mb-12">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-foreground">Latest News</h2>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-xl font-bold text-foreground">Latest News</h2>
+                <span className="text-sm text-muted-foreground">The Hindu</span>
               </div>
-              <div className="relative overflow-hidden bg-muted/50 rounded-lg p-4">
-                <div className="flex gap-6 animate-scroll">
-                  {[...rssLatestNews, ...rssLatestNews].map((item, index) => (
-                    <a
-                      key={`rss-${index}`}
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-shrink-0 w-80 p-4 bg-background rounded-lg hover:shadow-md transition-shadow"
-                    >
-                      <h3 className="text-sm font-semibold line-clamp-2 mb-2 hover:text-primary transition-colors">
-                        {item.title}
-                      </h3>
-                      <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
-                        {item.description.replace(/<[^>]*>/g, '')}
-                      </p>
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Clock className="h-3 w-3" />
-                        {new Date(item.pubDate).toLocaleDateString()}
-                      </div>
-                    </a>
-                  ))}
+              <div className="relative h-32 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-red-600">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="flex gap-8 animate-scroll px-4">
+                    {[...rssLatestNews, ...rssLatestNews].map((item, index) => (
+                      <a
+                        key={`rss-${index}`}
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-shrink-0 w-96 text-white hover:opacity-90 transition-opacity"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-white animate-pulse"></div>
+                          <div className="flex-1">
+                            <h3 className="text-sm font-semibold line-clamp-2 mb-1">
+                              {item.title}
+                            </h3>
+                            <p className="text-xs opacity-90 line-clamp-1">
+                              {item.description}
+                            </p>
+                          </div>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
             </section>
