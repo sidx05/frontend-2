@@ -412,7 +412,7 @@ export default function HomePage() {
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold text-foreground">Latest News</h2>
                 <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">Business Standard</span>
+                  <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">Scroll.in</span>
                   <span className="text-sm text-muted-foreground">{rssLatestNews.length} stories</span>
                 </div>
               </div>
@@ -469,13 +469,13 @@ export default function HomePage() {
             <section className="mb-12">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold text-foreground">Latest News</h2>
-                <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">Business Standard</span>
+                <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">Scroll.in</span>
               </div>
               <div className="relative h-52 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 border border-white/10 shadow-2xl flex items-center justify-center">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10"></div>
                 <div className="relative text-center">
                   <div className="text-white/90 text-base font-semibold mb-2">No latest news available yet</div>
-                  <div className="text-white/60 text-sm">Articles will appear here once scraped from Business Standard</div>
+                  <div className="text-white/60 text-sm">Articles will appear here once scraped from Scroll.in</div>
                 </div>
               </div>
             </section>
