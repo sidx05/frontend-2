@@ -572,58 +572,58 @@ export default function HomePage() {
 
           {/* Main Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Left Sidebar - Enhanced Design */}
+            {/* Left Sidebar - Completely Redesigned */}
             <div className="lg:col-span-1 space-y-6">
-              <WeatherWidget />
-              
-              {/* Trending Topics - Beautified */}
+              {/* Weather Widget */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.4 }}
               >
-                <Card className="border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-card to-card/80">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="flex items-center gap-2 text-lg">
-                      <div className="p-2 rounded-lg bg-primary/10">
+                <WeatherWidget />
+              </motion.div>
+              
+              {/* Trending Topics - Modern Redesign */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+              >
+                <Card className="border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+                  <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 px-6 py-4 border-b border-border/50">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10 backdrop-blur-sm">
                         <TrendingUp className="h-5 w-5 text-primary" />
                       </div>
-                      <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent font-bold">
-                        Trending Topics
-                      </span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
+                      <h3 className="text-lg font-bold text-foreground">Trending Topics</h3>
+                    </div>
+                  </div>
+                  <CardContent className="p-4 space-y-1">
                     {trendingTopics.map((topic: any, index: number) => (
                       <motion.div
                         key={`trending-${topic.name}-${index}`}
-                        initial={{ opacity: 0, x: -20 }}
+                        initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.05 }}
-                        className="group relative"
+                        className="group"
                       >
-                        <div className="flex items-center justify-between p-3 rounded-xl hover:bg-primary/5 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary/20 hover:shadow-md">
+                        <div className="flex items-center justify-between p-3 rounded-lg hover:bg-accent/50 transition-all duration-200 cursor-pointer">
                           <div className="flex items-center gap-3 flex-1">
-                            <div className={`flex items-center justify-center w-7 h-7 rounded-full font-bold text-xs transition-all duration-300 ${
-                              index === 0 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-lg' :
-                              index === 1 ? 'bg-gradient-to-br from-gray-300 to-gray-500 text-white shadow-md' :
-                              index === 2 ? 'bg-gradient-to-br from-orange-400 to-orange-600 text-white shadow-md' :
-                              'bg-muted text-muted-foreground'
-                            }`}>
+                            <span className="flex items-center justify-center w-6 h-6 rounded-full bg-muted text-xs font-bold text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                               {index + 1}
-                            </div>
-                            <span className="font-semibold text-sm group-hover:text-primary transition-colors">
+                            </span>
+                            <span className="font-medium text-sm text-foreground group-hover:text-primary transition-colors line-clamp-1">
                               {topic.name}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-full">
+                          <div className="flex items-center gap-2 ml-2">
+                            <span className="text-xs font-semibold text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-full min-w-[2rem] text-center">
                               {topic.count}
                             </span>
-                            <div className={`w-2 h-2 rounded-full animate-pulse ${
-                              topic.trend === "up" ? "bg-green-500 shadow-lg shadow-green-500/50" : 
-                              topic.trend === "down" ? "bg-red-500 shadow-lg shadow-red-500/50" : 
-                              "bg-gray-500"
+                            <div className={`w-1.5 h-1.5 rounded-full ${
+                              topic.trend === "up" ? "bg-green-500" : 
+                              topic.trend === "down" ? "bg-red-500" : 
+                              "bg-gray-400"
                             }`} />
                           </div>
                         </div>
@@ -633,29 +633,27 @@ export default function HomePage() {
                 </Card>
               </motion.div>
 
-              {/* Uncategorized Articles - Beautified */}
+              {/* Other Stories - Modern Redesign */}
               {uncategorizedArticles.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
                 >
-                  <Card className="border-primary/10 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-card to-card/80">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="flex items-center gap-2 text-lg">
-                        <div className="p-2 rounded-lg bg-primary/10">
+                  <Card className="border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+                    <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 px-6 py-4 border-b border-border/50">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-primary/10 backdrop-blur-sm">
                           <Bookmark className="h-5 w-5 text-primary" />
                         </div>
-                        <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent font-bold">
-                          Other Stories
-                        </span>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
+                        <h3 className="text-lg font-bold text-foreground">Other Stories</h3>
+                      </div>
+                    </div>
+                    <CardContent className="p-4 space-y-3">
                       {uncategorizedArticles.slice(0, 4).map((article: any, index: number) => (
                         <motion.div
                           key={`home-uncategorized-${article.id || `fallback-${index}`}-${index}`}
-                          initial={{ opacity: 0, x: -20 }}
+                          initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.3, delay: index * 0.05 }}
                         >
@@ -663,25 +661,23 @@ export default function HomePage() {
                             href={`/article/${article.slug}`}
                             className="block group"
                           >
-                            <div className="flex gap-3 p-3 rounded-xl hover:bg-primary/5 transition-all duration-300 border border-transparent hover:border-primary/20 hover:shadow-md">
+                            <div className="flex gap-3 p-2.5 rounded-lg hover:bg-accent/50 transition-all duration-200">
                               {article.thumbnail && (
-                                <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden ring-2 ring-primary/10 group-hover:ring-primary/30 transition-all duration-300">
+                                <div className="flex-shrink-0 w-16 h-16 rounded-md overflow-hidden bg-muted">
                                   <img 
                                     src={article.thumbnail} 
                                     alt={article.title}
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                   />
                                 </div>
                               )}
                               <div className="flex-1 min-w-0">
-                                <h4 className="text-sm font-semibold line-clamp-2 group-hover:text-primary transition-colors leading-tight mb-2">
+                                <h4 className="text-sm font-semibold line-clamp-2 group-hover:text-primary transition-colors leading-snug mb-1.5">
                                   {article.title}
                                 </h4>
-                                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                  <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-full">
-                                    <Clock className="h-3 w-3" />
-                                    <span className="font-medium">{article.time}</span>
-                                  </div>
+                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                  <Clock className="h-3 w-3" />
+                                  <span>{article.time}</span>
                                 </div>
                               </div>
                             </div>
@@ -689,13 +685,13 @@ export default function HomePage() {
                         </motion.div>
                       ))}
                       {uncategorizedArticles.length > 4 && (
-                        <div className="pt-3 border-t border-border/50">
+                        <div className="pt-3 border-t border-border/50 mt-3">
                           <Link 
                             href="/news?category=uncategorized"
-                            className="flex items-center justify-center gap-2 text-sm text-primary hover:text-primary/80 font-semibold transition-colors py-2 px-4 rounded-lg hover:bg-primary/5"
+                            className="flex items-center justify-between text-sm text-primary hover:text-primary/80 font-medium transition-colors py-2 px-3 rounded-lg hover:bg-primary/5 group"
                           >
                             <span>View all stories</span>
-                            <ArrowRight className="h-4 w-4" />
+                            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                           </Link>
                         </div>
                       )}
