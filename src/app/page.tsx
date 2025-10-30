@@ -393,20 +393,20 @@ export default function HomePage() {
       <Navbar />
       <main className="pt-32 pb-16">
         <div className="container mx-auto px-4">
-          {/* Welcome Banner - Glass Effect with Increased Height */}
-          <section className="mb-6">
-            <div className="relative h-24 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 border border-white/20 flex items-center justify-center">
+          {/* Welcome Banner - Glass Effect with Responsive Height */}
+          <section className="mb-4 md:mb-6">
+            <div className="relative h-16 md:h-24 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 border border-white/20 flex items-center justify-center">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20"></div>
-              <div className="relative text-center px-6 py-3 flex items-center gap-4">
+              <div className="relative text-center px-4 md:px-6 py-2 md:py-3 flex items-center gap-2 md:gap-4">
                 <div className="flex-1">
-                  <h1 className="text-xl md:text-2xl font-bold text-foreground mb-1">Welcome to NewsHub</h1>
-                  <p className="text-xs md:text-sm text-muted-foreground">Stay updated with the latest news from around the world</p>
+                  <h1 className="text-base md:text-xl lg:text-2xl font-bold text-foreground mb-0.5 md:mb-1">Welcome to NewsHub</h1>
+                  <p className="text-[10px] md:text-xs lg:text-sm text-muted-foreground hidden sm:block">Stay updated with the latest news from around the world</p>
                 </div>
                 <Button 
                   variant="secondary" 
                   size="sm" 
                   onClick={() => router.push('/news')}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20"
+                  className="bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 text-xs md:text-sm px-2 md:px-4"
                 >
                   Explore <ArrowRight className="h-3 w-3 ml-1" />
                 </Button>
@@ -416,74 +416,74 @@ export default function HomePage() {
 
           {/* Latest News - Professional Sleek Design */}
           {latestNewsLoading ? (
-            <section className="mb-12">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-foreground">Latest News</h2>
-                <div className="flex items-center gap-3">
-                  <span className="text-sm text-muted-foreground">Loading...</span>
+            <section className="mb-6 md:mb-12">
+              <div className="flex items-center justify-between mb-3 md:mb-4">
+                <h2 className="text-lg md:text-2xl font-bold text-foreground">Latest News</h2>
+                <div className="flex items-center gap-2 md:gap-3">
+                  <span className="text-xs md:text-sm text-muted-foreground">Loading...</span>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => router.push('/latest-news')}
-                    className="text-primary hover:text-primary/80"
+                    className="text-primary hover:text-primary/80 text-xs md:text-sm"
                   >
                     More
                   </Button>
                 </div>
               </div>
-              <div className="relative h-52 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-br from-slate-900/90 via-slate-800/90 to-slate-900/90 border border-white/10 flex items-center justify-center">
-                <div className="text-white text-sm">Loading latest news...</div>
+              <div className="relative h-32 md:h-52 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-br from-slate-900/90 via-slate-800/90 to-slate-900/90 border border-white/10 flex items-center justify-center">
+                <div className="text-white text-xs md:text-sm">Loading latest news...</div>
               </div>
             </section>
           ) : rssLatestNews.length > 0 ? (
-            <section className="mb-12">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-foreground">Latest News</h2>
-                <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">Scroll.in</span>
-                  <span className="text-sm text-muted-foreground">{rssLatestNews.length} stories</span>
+            <section className="mb-6 md:mb-12">
+              <div className="flex items-center justify-between mb-3 md:mb-4">
+                <h2 className="text-lg md:text-2xl font-bold text-foreground">Latest News</h2>
+                <div className="flex items-center gap-2 md:gap-3">
+                  <span className="px-2 md:px-3 py-0.5 md:py-1 rounded-full bg-primary/10 text-primary text-[10px] md:text-xs font-medium">Scroll.in</span>
+                  <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">{rssLatestNews.length} stories</span>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => router.push('/latest-news')}
-                    className="text-primary hover:text-primary/80"
+                    className="text-primary hover:text-primary/80 text-xs md:text-sm"
                   >
                     More
                   </Button>
                 </div>
               </div>
-              <div className="relative h-52 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 border border-white/10 shadow-2xl">
+              <div className="relative h-32 md:h-52 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 border border-white/10 shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10"></div>
                 <div className="absolute inset-0 flex items-center">
-                  <div className="flex gap-6 animate-scroll px-6">
+                  <div className="flex gap-3 md:gap-6 animate-scroll px-3 md:px-6">
                     {[...rssLatestNews, ...rssLatestNews].map((item, index) => (
                       <Link
                         key={`rss-${index}`}
                         href={`/article/${item.slug}`}
-                        className="group flex-shrink-0 w-[440px] bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md rounded-xl p-5 hover:from-white/15 hover:to-white/10 transition-all duration-300 border border-white/10 hover:border-white/20 shadow-lg hover:shadow-xl"
+                        className="group flex-shrink-0 w-[280px] md:w-[440px] bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md rounded-xl p-3 md:p-5 hover:from-white/15 hover:to-white/10 transition-all duration-300 border border-white/10 hover:border-white/20 shadow-lg hover:shadow-xl"
                       >
-                        <div className="flex items-start gap-4 h-full">
+                        <div className="flex items-start gap-2 md:gap-4 h-full">
                           {/* Modern Image Placeholder */}
-                          <div className="flex-shrink-0 w-28 h-28 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 overflow-hidden border border-white/10 group-hover:scale-105 transition-transform duration-300">
+                          <div className="flex-shrink-0 w-16 h-16 md:w-28 md:h-28 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 overflow-hidden border border-white/10 group-hover:scale-105 transition-transform duration-300">
                             <div className="w-full h-full flex items-center justify-center backdrop-blur-sm">
-                              <svg className="w-10 h-10 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-6 h-6 md:w-10 md:h-10 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                               </svg>
                             </div>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="text-base font-bold text-white line-clamp-2 mb-2 group-hover:text-blue-200 transition-colors">
+                            <h3 className="text-xs md:text-base font-bold text-white line-clamp-2 mb-1 md:mb-2 group-hover:text-blue-200 transition-colors">
                               {item.title}
                             </h3>
-                            <p className="text-sm text-white/70 line-clamp-2 mb-3 leading-relaxed">
+                            <p className="text-[10px] md:text-sm text-white/70 line-clamp-1 md:line-clamp-2 mb-1 md:mb-3 leading-relaxed">
                               {item.description}
                             </p>
-                            <div className="flex items-center gap-2">
-                              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
-                                <svg className="w-3 h-3 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="flex items-center gap-1 md:gap-2">
+                              <div className="flex items-center gap-1 md:gap-1.5 px-1.5 md:px-2.5 py-0.5 md:py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
+                                <svg className="w-2.5 h-2.5 md:w-3 md:h-3 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span className="text-xs text-white/70 font-medium">
+                                <span className="text-[10px] md:text-xs text-white/70 font-medium">
                                   {new Date(item.pubDate).toLocaleDateString('en-US', { 
                                     month: 'short', 
                                     day: 'numeric',
@@ -502,26 +502,26 @@ export default function HomePage() {
               </div>
             </section>
           ) : (
-            <section className="mb-12">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-foreground">Latest News</h2>
-                <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">Scroll.in</span>
+            <section className="mb-6 md:mb-12">
+              <div className="flex items-center justify-between mb-3 md:mb-4">
+                <h2 className="text-lg md:text-2xl font-bold text-foreground">Latest News</h2>
+                <div className="flex items-center gap-2 md:gap-3">
+                  <span className="px-2 md:px-3 py-0.5 md:py-1 rounded-full bg-primary/10 text-primary text-[10px] md:text-xs font-medium">Scroll.in</span>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => router.push('/latest-news')}
-                    className="text-primary hover:text-primary/80"
+                    className="text-primary hover:text-primary/80 text-xs md:text-sm"
                   >
                     More
                   </Button>
                 </div>
               </div>
-              <div className="relative h-52 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 border border-white/10 shadow-2xl flex items-center justify-center">
+              <div className="relative h-32 md:h-52 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 border border-white/10 shadow-2xl flex items-center justify-center">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10"></div>
-                <div className="relative text-center">
-                  <div className="text-white/90 text-base font-semibold mb-2">No latest news available yet</div>
-                  <div className="text-white/60 text-sm">Articles will appear here once scraped from Scroll.in</div>
+                <div className="relative text-center px-4">
+                  <div className="text-white/90 text-sm md:text-base font-semibold mb-1 md:mb-2">No latest news available yet</div>
+                  <div className="text-white/60 text-xs md:text-sm">Articles will appear here once scraped from Scroll.in</div>
                 </div>
               </div>
             </section>
@@ -588,15 +588,16 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* Main Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Left Sidebar - Completely Redesigned */}
-            <div className="lg:col-span-1 space-y-6">
+          {/* Main Layout - Mobile First: Content then Sidebar */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 md:gap-8">
+            {/* Sidebar - Shows After Content on Mobile */}
+            <div className="lg:col-span-1 space-y-4 md:space-y-6 order-2 lg:order-1">
               {/* Weather Widget */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
+                className="hidden lg:block"
               >
                 <WeatherWidget />
               </motion.div>
@@ -759,7 +760,7 @@ export default function HomePage() {
                 </motion.div>
               )}
 
-              {/* Languages Bar */}
+              {/* Useful Tools Section */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -769,29 +770,36 @@ export default function HomePage() {
                   <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 px-6 py-4 border-b border-border/50">
                     <div className="flex items-center gap-3">
                       <div className="p-2 rounded-lg bg-primary/10 backdrop-blur-sm">
-                        <Globe className="h-5 w-5 text-primary" />
+                        <svg className="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
                       </div>
-                      <h3 className="text-lg font-bold text-foreground">Languages</h3>
+                      <h3 className="text-lg font-bold text-foreground">Useful</h3>
                     </div>
                   </div>
                   <CardContent className="p-4">
                     <div className="grid grid-cols-2 gap-2">
-                      {['en', 'hi', 'te', 'ta', 'bn', 'gu'].map((lang, index) => (
+                      {[
+                        { name: 'Personal Loan', icon: '👤', color: 'from-blue-500/10 to-blue-600/10 hover:from-blue-500/20 hover:to-blue-600/20 border-blue-500/20' },
+                        { name: 'Education Loan', icon: '🎓', color: 'from-green-500/10 to-green-600/10 hover:from-green-500/20 hover:to-green-600/20 border-green-500/20' },
+                        { name: 'Car Loan', icon: '🚗', color: 'from-purple-500/10 to-purple-600/10 hover:from-purple-500/20 hover:to-purple-600/20 border-purple-500/20' },
+                        { name: 'Home Loan', icon: '🏠', color: 'from-orange-500/10 to-orange-600/10 hover:from-orange-500/20 hover:to-orange-600/20 border-orange-500/20' }
+                      ].map((tool, index) => (
                         <motion.div
-                          key={`lang-${lang}`}
+                          key={`tool-${tool.name}`}
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ duration: 0.3, delay: index * 0.05 }}
                         >
-                          <Link href={`/news?lang=${lang}`}>
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              className="w-full justify-start hover:bg-primary hover:text-primary-foreground transition-colors"
-                            >
-                              {getLanguageDisplayName(lang)}
-                            </Button>
-                          </Link>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className={`w-full h-auto py-3 px-2 flex flex-col items-center gap-2 bg-gradient-to-br ${tool.color} border transition-all duration-300 hover:scale-105 hover:shadow-md`}
+                            onClick={() => window.open(`https://www.calculator.net/${tool.name.toLowerCase().replace(' ', '-')}-calculator.html`, '_blank')}
+                          >
+                            <span className="text-2xl">{tool.icon}</span>
+                            <span className="text-xs font-semibold text-center leading-tight">{tool.name}</span>
+                          </Button>
                         </motion.div>
                       ))}
                     </div>
@@ -800,8 +808,8 @@ export default function HomePage() {
               </motion.div>
             </div>
 
-            {/* Main Content Area */}
-            <div className="lg:col-span-3">
+            {/* Main Content Area - Shows First on Mobile */}
+            <div className="lg:col-span-3 order-1 lg:order-2">
               {/* Articles Without Images - Featured General News */}
               {uncategorizedArticles.length > 0 && (
                 <section className="mb-12">
