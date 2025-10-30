@@ -90,11 +90,11 @@ export default function HomePage() {
           setTrendingTopics(computeTrendingFromArticles(articlesList).slice(0, 6));
         }
 
-        // Load language sections in parallel (only top 3 languages for performance)
-        const languages = ['en', 'hi', 'te']; // Reduced from 8 to 3
+        // Load language sections in parallel - all 8 languages
+        const languages = ['en', 'hi', 'te', 'ta', 'ml', 'bn', 'gu', 'mr'];
         const languageSectionsData: any[] = [];
         
-        // Fetch all language sections in parallel instead of sequentially
+        // Fetch all language sections in parallel instead of sequentially (keeps it fast)
         const languagePromises = languages.map(async (lang) => {
           try {
             const [langArticles, categories] = await Promise.all([
@@ -133,7 +133,7 @@ export default function HomePage() {
         const results = await Promise.all(languagePromises);
         const validResults = results.filter(r => r !== null);
         
-        // Enforce display order: English → Hindi → Telugu
+        // Enforce display order: English → Hindi → Telugu → others in original order
         const langOrder: Record<string, number> = { en: 0, hi: 1, te: 2 };
         validResults.sort((a: any, b: any) => {
           const oa = langOrder[a.language] ?? 99;
