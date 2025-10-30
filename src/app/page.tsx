@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import WeatherWidget from "@/components/weather/weather-widget";
+import LoanCalculator from "@/components/calculators/loan-calculator";
 import { fetchCategories, fetchArticles, fetchTrending } from "../lib/api";
 
 type BackendArticle = any;
@@ -37,7 +38,8 @@ export default function HomePage() {
   const [latestNewsLoading, setLatestNewsLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [quickReads, setQuickReads] = useState<any[]>([]);
-  const [moreStories, setMoreStories] = useState<any[]>([]);  
+  const [moreStories, setMoreStories] = useState<any[]>([]);
+  const [activeCalculator, setActiveCalculator] = useState<'personal' | 'education' | 'car' | 'home' | null>(null);  
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -780,10 +782,10 @@ export default function HomePage() {
                   <CardContent className="p-4">
                     <div className="grid grid-cols-2 gap-2">
                       {[
-                        { name: 'Personal Loan', icon: '👤', color: 'from-blue-500/10 to-blue-600/10 hover:from-blue-500/20 hover:to-blue-600/20 border-blue-500/20' },
-                        { name: 'Education Loan', icon: '🎓', color: 'from-green-500/10 to-green-600/10 hover:from-green-500/20 hover:to-green-600/20 border-green-500/20' },
-                        { name: 'Car Loan', icon: '🚗', color: 'from-purple-500/10 to-purple-600/10 hover:from-purple-500/20 hover:to-purple-600/20 border-purple-500/20' },
-                        { name: 'Home Loan', icon: '🏠', color: 'from-orange-500/10 to-orange-600/10 hover:from-orange-500/20 hover:to-orange-600/20 border-orange-500/20' }
+                        { name: 'Personal Loan', type: 'personal' as const, icon: '👤', color: 'from-blue-500/10 to-blue-600/10 hover:from-blue-500/20 hover:to-blue-600/20 border-blue-500/20' },
+                        { name: 'Education Loan', type: 'education' as const, icon: '🎓', color: 'from-green-500/10 to-green-600/10 hover:from-green-500/20 hover:to-green-600/20 border-green-500/20' },
+                        { name: 'Car Loan', type: 'car' as const, icon: '🚗', color: 'from-purple-500/10 to-purple-600/10 hover:from-purple-500/20 hover:to-purple-600/20 border-purple-500/20' },
+                        { name: 'Home Loan', type: 'home' as const, icon: '🏠', color: 'from-orange-500/10 to-orange-600/10 hover:from-orange-500/20 hover:to-orange-600/20 border-orange-500/20' }
                       ].map((tool, index) => (
                         <motion.div
                           key={`tool-${tool.name}`}
@@ -795,7 +797,7 @@ export default function HomePage() {
                             variant="outline" 
                             size="sm" 
                             className={`w-full h-auto py-3 px-2 flex flex-col items-center gap-2 bg-gradient-to-br ${tool.color} border transition-all duration-300 hover:scale-105 hover:shadow-md`}
-                            onClick={() => window.open(`https://www.calculator.net/${tool.name.toLowerCase().replace(' ', '-')}-calculator.html`, '_blank')}
+                            onClick={() => setActiveCalculator(tool.type)}
                           >
                             <span className="text-2xl">{tool.icon}</span>
                             <span className="text-xs font-semibold text-center leading-tight">{tool.name}</span>
@@ -1001,6 +1003,14 @@ export default function HomePage() {
         </div>
       </main>
       <Footer />
+      
+      {/* Loan Calculator Modal */}
+      {activeCalculator && (
+        <LoanCalculator 
+          type={activeCalculator} 
+          onClose={() => setActiveCalculator(null)} 
+        />
+      )}
     </div>
   );
 }

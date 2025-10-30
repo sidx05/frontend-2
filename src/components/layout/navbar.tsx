@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Search, Menu, Sun, Moon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import SearchBar from "@/components/search/SearchBar";
@@ -14,11 +15,22 @@ import Ticker from "@/components/ticker/Ticker";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
+  const router = useRouter();
   const [categories, setCategories] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const { theme, setTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
+
+  const languages = [
+    { code: 'en', name: 'English', native: 'English' },
+    { code: 'hi', name: 'Hindi', native: 'हिन्दी' },
+    { code: 'te', name: 'Telugu', native: 'తెలుగు' },
+    { code: 'ta', name: 'Tamil', native: 'தமிழ்' },
+    { code: 'bn', name: 'Bengali', native: 'বাংলা' },
+    { code: 'gu', name: 'Gujarati', native: 'ગુજરાતી' },
+    { code: 'mr', name: 'Marathi', native: 'मराठी' }
+  ];
 
   useEffect(() => {
     setIsMounted(true);
@@ -47,6 +59,21 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         {/* Breaking ticker (live) */}
         <Ticker />
+
+        {/* Language Buttons - Mobile Only (under ticker) */}
+        <div className="md:hidden border-t border-border/50">
+          <div className="flex items-center gap-2 py-2 px-2 overflow-x-auto scrollbar-hide">
+            {languages.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => router.push(`/news?lang=${lang.code}`)}
+                className="flex-shrink-0 px-3 py-1.5 text-xs font-medium rounded-full bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 transition-all duration-200 hover:scale-105"
+              >
+                {lang.native}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
