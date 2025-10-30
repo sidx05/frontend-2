@@ -375,13 +375,13 @@ export default function HomePage() {
       <Navbar />
       <main className="pt-32 pb-16">
         <div className="container mx-auto px-4">
-          {/* Welcome Banner - Reduced Height */}
+          {/* Welcome Banner - Compact */}
           <section className="mb-6">
-            <div className="relative h-48 md:h-64 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white">
-              <div className="text-center p-8">
-                <h1 className="text-3xl md:text-4xl font-bold mb-4">Welcome to NewsHub</h1>
-                <p className="text-lg md:text-xl mb-4 max-w-3xl">Stay updated with the latest news from around the world</p>
-                <Button variant="secondary" size="lg" onClick={() => router.push('/news')}>
+            <div className="relative h-32 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white">
+              <div className="text-center px-8 py-4">
+                <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome to NewsHub</h1>
+                <p className="text-sm md:text-base mb-3 max-w-2xl">Stay updated with the latest news from around the world</p>
+                <Button variant="secondary" size="default" onClick={() => router.push('/news')}>
                   Explore News <ArrowRight className="h-4 w-4 ml-1" />
                 </Button>
               </div>
@@ -395,7 +395,7 @@ export default function HomePage() {
                 <h2 className="text-xl font-bold text-foreground">Latest News</h2>
                 <span className="text-sm text-muted-foreground">Loading...</span>
               </div>
-              <div className="relative h-32 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center">
+              <div className="relative h-48 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center">
                 <div className="text-white text-sm">Loading latest news...</div>
               </div>
             </section>
@@ -405,23 +405,38 @@ export default function HomePage() {
                 <h2 className="text-xl font-bold text-foreground">Latest News</h2>
                 <span className="text-sm text-muted-foreground">Business Standard • {rssLatestNews.length} stories</span>
               </div>
-              <div className="relative h-32 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-red-600">
+              <div className="relative h-48 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-red-600">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="flex gap-8 animate-scroll px-4">
+                  <div className="flex gap-6 animate-scroll px-4">
                     {[...rssLatestNews, ...rssLatestNews].map((item, index) => (
                       <Link
                         key={`rss-${index}`}
                         href={`/article/${item.slug}`}
-                        className="flex-shrink-0 w-96 text-white hover:opacity-90 transition-opacity"
+                        className="flex-shrink-0 w-[420px] bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition-all duration-300 border border-white/20"
                       >
-                        <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-white animate-pulse"></div>
-                          <div className="flex-1">
-                            <h3 className="text-sm font-semibold line-clamp-2 mb-1">
+                        <div className="flex items-start gap-4 h-full">
+                          {/* Placeholder Image */}
+                          <div className="flex-shrink-0 w-24 h-24 rounded-lg bg-white/20 overflow-hidden">
+                            <div className="w-full h-full flex items-center justify-center">
+                              <svg className="w-8 h-8 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                              </svg>
+                            </div>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="text-sm font-bold text-white line-clamp-2 mb-2">
                               {item.title}
                             </h3>
-                            <p className="text-xs opacity-90 line-clamp-1">
+                            <p className="text-xs text-white/80 line-clamp-2 mb-2">
                               {item.description}
+                            </p>
+                            <p className="text-xs text-white/60">
+                              {new Date(item.pubDate).toLocaleDateString('en-US', { 
+                                month: 'short', 
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })}
                             </p>
                           </div>
                         </div>
@@ -437,7 +452,7 @@ export default function HomePage() {
                 <h2 className="text-xl font-bold text-foreground">Latest News</h2>
                 <span className="text-sm text-muted-foreground">Business Standard</span>
               </div>
-              <div className="relative h-32 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center">
+              <div className="relative h-48 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center">
                 <div className="text-white text-sm">
                   <div className="flex flex-col items-center gap-2">
                     <div className="text-base font-semibold">No latest news available yet</div>
