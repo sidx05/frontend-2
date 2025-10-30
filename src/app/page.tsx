@@ -403,7 +403,7 @@ export default function HomePage() {
             <section className="mb-12">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-xl font-bold text-foreground">Latest News</h2>
-                <span className="text-sm text-muted-foreground">The Hindu</span>
+                <span className="text-sm text-muted-foreground">The Hindu • {rssLatestNews.length} stories</span>
               </div>
               <div className="relative h-32 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-red-600">
                 <div className="absolute inset-0 flex items-center">
@@ -431,7 +431,22 @@ export default function HomePage() {
                 </div>
               </div>
             </section>
-          ) : null}
+          ) : (
+            <section className="mb-12">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-xl font-bold text-foreground">Latest News</h2>
+                <span className="text-sm text-muted-foreground">The Hindu</span>
+              </div>
+              <div className="relative h-32 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center">
+                <div className="text-white text-sm">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="text-base font-semibold">No latest news available yet</div>
+                    <div className="text-xs opacity-80">Articles will appear here once scraped from The Hindu</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
 
           {/* Featured (Removed - replaced by welcome banner) */}
           <section className="mb-12 hidden">
