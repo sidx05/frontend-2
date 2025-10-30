@@ -3,6 +3,23 @@ const API_HOST = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefine
 // Backend public routes are mounted under /api/public/* in the server
 const PUBLIC_BASE = `${API_HOST}/api/public`;
 
+// Simple in-memory cache with TTL
+const cache = new Map<string, { data: any; expires: number }>();
+const CACHE_TTL = 60 * 1000; // 60 seconds
+
+function getCached(key: string): any | null {
+  const cached = cache.get(key);
+  if (cached && cached.expires > Date.now()) {
+    return cached.data;
+  }
+  cache.delete(key);
+  return null;
+}
+
+function setCache(key: string, data: any): void {
+  cache.set(key, { data, expires: Date.now() + CACHE_TTL });
+}
+
 async function safeJson(res: Response) {
   let json: any = null;
   try {
@@ -34,14 +51,20 @@ export async function fetchCategoryBySlug(slug: string) {
 
 
 export async function fetchCategories() {
+  const cacheKey = 'categories';
+  const cached = getCached(cacheKey);
+  if (cached) return cached;
+  
   const res = await fetch(`${API_HOST}/api/categories`, { cache: "no-store" });
   const json = await safeJson(res);
-  return normalizeArrayResponse(json);
+  const result = normalizeArrayResponse(json);
+  setCache(cacheKey, result);
+  return result;
 }
 
 /**
  * fetchArticles(options)
- * options: { limit?: number, category?: string, categoryKey?: string, page?: number, q?: string }
+ * options: { limit?: number, category?: string, categoryKey?: string, page?: number, q?: string, lang?: string }
  * Returns an array (possibly empty).
  */
 export async function fetchArticles(options?: Record<string, any>) {
@@ -52,9 +75,16 @@ export async function fetchArticles(options?: Record<string, any>) {
       if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
     });
   }
+  
+  const cacheKey = url.toString();
+  const cached = getCached(cacheKey);
+  if (cached) return cached;
+  
   const res = await fetch(url.toString(), { cache: "no-store" });
   const json = await safeJson(res);
-  return normalizeArrayResponse(json);
+  const result = normalizeArrayResponse(json);
+  setCache(cacheKey, result);
+  return result;
 }
 
 export async function fetchArticleBySlug(slug: string) {

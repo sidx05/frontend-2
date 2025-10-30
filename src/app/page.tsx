@@ -48,10 +48,10 @@ export default function HomePage() {
     let mounted = true;
     (async () => {
       try {
-        // Fetch articles and trending data in parallel
+        // Fetch only essential data in parallel for faster initial load
         const [rawArticles, trendingData] = await Promise.all([
-          fetchArticles({ lang: 'en' }), // Only fetch English articles for homepage, let API use settings limit
-          fetchTrending().catch(() => []) // Fallback to empty array if trending fails
+          fetchArticles({ lang: 'en', limit: 12 }), // Limit initial fetch
+          fetchTrending().catch(() => [])
         ]);
         
         const articlesList = Array.isArray(rawArticles) ? rawArticles : [];
@@ -66,10 +66,9 @@ export default function HomePage() {
 
         if (!mounted) return;
         
-        // Ensure we always have featured articles for the carousel
+        // Set featured and latest articles immediately
         const featured = mapped.slice(0, 3);
         if (featured.length === 0 && mapped.length > 0) {
-          // If no featured articles, use the latest ones
           setFeaturedArticles(mapped.slice(0, Math.min(3, mapped.length)));
         } else {
           setFeaturedArticles(featured);
@@ -77,11 +76,10 @@ export default function HomePage() {
         
         setLatestArticles(mapped.slice(0, 4));
         
-        // Use real trending topics from backend
+        // Set trending topics
         if (trendingData && trendingData.topics && Array.isArray(trendingData.topics) && trendingData.topics.length > 0) {
           setTrendingTopics(trendingData.topics.slice(0, 6));
         } else if (Array.isArray(trendingData) && trendingData.length > 0) {
-          // Fallback: use article titles as trending topics
           const trendingTopics = trendingData.slice(0, 6).map((article: any, index: number) => ({
             name: article.title || `Trending ${index + 1}`,
             count: article.viewCount || Math.floor(Math.random() * 100) + 10,
@@ -92,68 +90,25 @@ export default function HomePage() {
           setTrendingTopics(computeTrendingFromArticles(articlesList).slice(0, 6));
         }
 
-        const catsResp = await fetchCategories();
-        const cats = Array.isArray(catsResp) ? catsResp : [];
-
-        if (cats.length > 0) {
-          const catSections: any[] = [];
-          for (const c of cats.slice(0, 6)) {
-            const catKey = c._id || c.id || c.key || c.slug || c.name;
-            let catArticlesArr: any[] = [];
-            if (catKey) {
-              catArticlesArr = await fetchArticles({ category: String(catKey) });
-              if (!Array.isArray(catArticlesArr) || catArticlesArr.length === 0) {
-                catArticlesArr = await fetchArticles({ categoryKey: String(catKey) });
-              }
-            }
-            const normalizedArr = Array.isArray(catArticlesArr) ? catArticlesArr : [];
-            catSections.push({
-              category:
-                c.label || c.name || c.key || (typeof c === "string" ? c : "Category"),
-              articles: normalizedArr.map(mapArticleToUi).map((a) => ({
-                id: a.id,
-                slug: a.slug,
-                title: a.title,
-                summary: a.summary,
-                time: a.time,
-              })),
-            });
-          }
-          if (mounted) setCategoryArticles(catSections);
-        } else {
-          if (mounted) setCategoryArticles(deriveCategorySectionsFromArticles(mapped));
-        }
-
-        // Fetch language-based sections
-        // Display order preference: English first, then Hindi, then Telugu, remaining unchanged
-        const languages = ['en', 'hi', 'te', 'ta', 'ml', 'bn', 'gu', 'mr'];
+        // Load language sections in parallel (only top 3 languages for performance)
+        const languages = ['en', 'hi', 'te']; // Reduced from 8 to 3
         const languageSectionsData: any[] = [];
         
-        // Canonical category order we want to expose per language
-        const defaultCategoryKeys = [
-          'politics',
-          'sports',
-          'business',
-          'entertainment',
-          'technology',
-          'health',
-          'education',
-          'crime'
-        ];
-
-        for (const lang of languages) {
+        // Fetch all language sections in parallel instead of sequentially
+        const languagePromises = languages.map(async (lang) => {
           try {
-            const langArticles = await fetch(`/api/news/latest?lang=${lang}&limit=6`).then(res => res.json());
-            const categories = await fetch(`/api/categories?lang=${lang}`).then(res => res.json());
-            
+            const [langArticles, categories] = await Promise.all([
+              fetch(`/api/news/latest?lang=${lang}&limit=6`).then(res => res.json()),
+              fetch(`/api/categories?lang=${lang}`).then(res => res.json())
+            ]);
             
             if (langArticles.success && langArticles.articles.length > 0) {
               const cats = categories.success ? (categories.categories || []) : [];
-              // Normalize to ensure we always show the canonical set (even if 0 articles yet)
+              const defaultCategoryKeys = ['politics', 'sports', 'business', 'entertainment', 'technology', 'health'];
+              
               const normalizedCats = defaultCategoryKeys.map((key) => {
                 const found = cats.find((c: any) => (c.key || '').toLowerCase() === key);
-                if (found) return found; // has { name: ObjectId, key, displayName, ... }
-                // Fallback stub uses key as the filter value (APIs accept string keys now)
+                if (found) return found;
                 return {
                   name: key,
                   key,
@@ -161,40 +116,33 @@ export default function HomePage() {
                   articleCount: 0,
                 };
               });
-              languageSectionsData.push({
-              language: lang,
-              displayName: getLanguageDisplayName(lang),
-              articles: langArticles.articles.map(mapArticleToUi),
-                // Always present canonical set; existing ones include ids, missing ones fall back to key
+              
+              return {
+                language: lang,
+                displayName: getLanguageDisplayName(lang),
+                articles: langArticles.articles.map(mapArticleToUi),
                 categories: normalizedCats
-              } as any);
+              };
             }
           } catch (err) {
             console.error(`Error fetching ${lang} articles:`, err);
           }
-        }
+          return null;
+        });
+
+        const results = await Promise.all(languagePromises);
+        const validResults = results.filter(r => r !== null);
         
-        // Enforce display order: English → Hindi → Telugu → others in original order
+        // Enforce display order: English → Hindi → Telugu
         const langOrder: Record<string, number> = { en: 0, hi: 1, te: 2 };
-        languageSectionsData.sort((a: any, b: any) => {
+        validResults.sort((a: any, b: any) => {
           const oa = langOrder[a.language] ?? 99;
           const ob = langOrder[b.language] ?? 99;
           return oa - ob;
         });
         
-        if (mounted) setLanguageSections(languageSectionsData);
+        if (mounted) setLanguageSections(validResults);
 
-        // Load uncategorized articles
-        try {
-          const uncategorizedResp = await fetch('/api/news?category=uncategorized');
-          const uncategorizedData = await uncategorizedResp.json();
-          if (uncategorizedData.success && uncategorizedData.articles) {
-            const mappedUncategorized = uncategorizedData.articles.map(mapArticleToUi);
-            if (mounted) setUncategorizedArticles(mappedUncategorized);
-          }
-        } catch (error) {
-          console.error('Error loading uncategorized articles:', error);
-        }
       } catch (err) {
         console.error("Error fetching articles:", err);
       }
@@ -260,109 +208,19 @@ export default function HomePage() {
     const time = timeAgo(publishedAt);
 
     const readTime = estimateReadTime(a.content || a.summary || "");
-    // Enhanced category mapping
-    let category = "General";
     
+    // Simplified category mapping - just use what backend provides
+    let category = "General";
     if (typeof a.category === "object") {
       category = a.category.label || a.category.name || a.category.key || "General";
     } else if (a.category) {
-      category = a.category;
+      category = String(a.category);
     }
     
-    // Smart categorization based on content analysis
-    const titleText = (a.title || "").toLowerCase();
-    const summaryText = (a.summary || "").toLowerCase();
-    const contentText = (a.content || "").toLowerCase();
-    const combinedText = `${titleText} ${summaryText} ${contentText}`;
-    
-    // Enhanced category keywords mapping with Telugu support
-    const categoryKeywords = {
-      politics: [
-        // English keywords
-        'politics', 'political', 'election', 'government', 'minister', 'chief minister', 'pm', 'president', 'parliament', 'assembly', 'vote', 'voting', 'party', 'congress', 'bjp', 'tdp', 'ysr', 'jagan', 'modi', 'rahul', 'trs', 'aap',
-        // Telugu keywords
-        'రాజకీయాలు', 'ఎన్నికలు', 'ప్రభుత్వం', 'మంత్రి', 'ముఖ్యమంత్రి', 'అసెంబ్లీ', 'పార్టీ', 'కాంగ్రెస్', 'బీజేపీ', 'టీడీపీ', 'వైఎస్ఆర్', 'జగన్', 'మోదీ', 'రాహుల్', 'టీఆర్ఎస్', 'ఆప్'
-      ],
-      sports: [
-        // English keywords
-        'sports', 'cricket', 'football', 'tennis', 'badminton', 'hockey', 'olympics', 'world cup', 'ipl', 'bcci', 'match', 'player', 'team', 'score', 'tournament', 'championship', 'athlete', 'game', 'sport',
-        // Telugu keywords
-        'క్రీడలు', 'క్రికెట్', 'ఫుట్బాల్', 'టెన్నిస్', 'బ్యాడ్మింటన్', 'హాకీ', 'ఒలింపిక్స్', 'వరల్డ్ కప్', 'ఐపిఎల్', 'బిసిసిఐ', 'మ్యాచ్', 'ఆటగాడు', 'టీమ్', 'స్కోర్', 'టోర్నమెంట్', 'ఛాంపియన్షిప్', 'ఆట'
-      ],
-      entertainment: [
-        // English keywords
-        'movie', 'film', 'cinema', 'actor', 'actress', 'director', 'bollywood', 'tollywood', 'kollywood', 'music', 'song', 'album', 'singer', 'dance', 'drama', 'theater', 'entertainment', 'celebrity', 'star', 'hero', 'heroine',
-        // Telugu keywords
-        'సినిమా', 'చలనచిత్రం', 'నటుడు', 'నటి', 'దర్శకుడు', 'టాలీవుడ్', 'కొలీవుడ్', 'సంగీతం', 'పాట', 'ఆల్బమ్', 'గాయకుడు', 'నృత్యం', 'నాటకం', 'థియేటర్', 'వినోదం', 'సెలబ్రిటీ', 'నక్షత్రం', 'హీరో', 'హీరోయిన్'
-      ],
-      technology: [
-        // English keywords - made more specific
-        'technology', 'computer', 'software', 'mobile phone', 'internet', 'artificial intelligence', 'robot', 'digital', 'cyber', 'hacking', 'startup', 'innovation', 'gadget', 'device', 'smartphone', 'laptop', 'programming', 'coding',
-        // Telugu keywords
-        'టెక్నాలజీ', 'కంప్యూటర్', 'సాఫ్ట్వేర్', 'మొబైల్ ఫోన్', 'ఇంటర్నెట్', 'కృత్రిమ మేధస్సు', 'రోబోట్', 'డిజిటల్', 'సైబర్', 'హ్యాకింగ్', 'స్టార్టప్', 'నవీకరణ', 'గ్యాజెట్', 'పరికరం', 'స్మార్ట్ఫోన్', 'ల్యాప్టాప్'
-      ],
-      health: [
-        // English keywords
-        'health', 'medical', 'doctor', 'hospital', 'medicine', 'disease', 'covid', 'corona', 'vaccine', 'treatment', 'surgery', 'patient', 'clinic', 'pharmacy', 'drug', 'therapy', 'wellness', 'fitness', 'nutrition', 'diet',
-        // Telugu keywords
-        'ఆరోగ్యం', 'వైద్య', 'డాక్టర్', 'ఆసుపత్రి', 'మందు', 'వ్యాధి', 'కోవిడ్', 'కరోనా', 'వ్యాక్సిన్', 'చికిత్స', 'శస్త్రచికిత్స', 'రోగి', 'క్లినిక్', 'ఫార్మసీ', 'మందు', 'థెరపీ', 'ఆరోగ్యం', 'ఫిట్నెస్', 'పోషకాహారం'
-      ],
-      business: [
-        // English keywords
-        'business', 'economy', 'economic', 'market', 'stock', 'share', 'company', 'corporate', 'finance', 'banking', 'investment', 'profit', 'loss', 'revenue', 'trade', 'commerce', 'industry', 'manufacturing', 'export', 'import',
-        // Telugu keywords
-        'వ్యాపారం', 'ఆర్థిక వ్యవస్థ', 'ఆర్థిక', 'మార్కెట్', 'స్టాక్', 'షేర్', 'కంపెనీ', 'కార్పొరేట్', 'ఫైనాన్స్', 'బ్యాంకింగ్', 'పెట్టుబడి', 'లాభం', 'నష్టం', 'రెవెన్యూ', 'వ్యాపారం', 'వాణిజ్యం', 'పరిశ్రమ', 'ఉత్పత్తి', 'ఎగుమతి', 'దిగుమతి'
-      ],
-      education: [
-        // English keywords
-        'education', 'school', 'college', 'university', 'student', 'teacher', 'exam', 'result', 'admission', 'course', 'degree', 'study', 'learning', 'academic', 'institute', 'training', 'scholarship', 'tuition',
-        // Telugu keywords
-        'విద్య', 'పాఠశాల', 'కళాశాల', 'విశ్వవిద్యాలయం', 'విద్యార్థి', 'ఉపాధ్యాయుడు', 'పరీక్ష', 'ఫలితం', 'ప్రవేశం', 'కోర్స్', 'డిగ్రీ', 'అధ్యయనం', 'అభ్యాసం', 'అకడమిక్', 'సంస్థ', 'శిక్షణ', 'విద్యార్థి వేతనం'
-      ],
-      crime: [
-        // English keywords
-        'crime', 'police', 'murder', 'theft', 'robbery', 'fraud', 'scam', 'arrest', 'jail', 'court', 'law', 'legal', 'criminal', 'investigation', 'case', 'trial', 'judge', 'lawyer', 'justice',
-        // Telugu keywords
-        'నేరం', 'పోలీసు', 'హత్య', 'దొంగతనం', 'దోపిడీ', 'మోసం', 'స్కామ్', 'అరెస్ట్', 'జైలు', 'కోర్టు', 'చట్టం', 'చట్టపరమైన', 'నేరస్థుడు', 'విచారణ', 'కేసు', 'విచారణ', 'న్యాయమూర్తి', 'వకీలు', 'న్యాయం'
-      ]
-    };
-    
-    // Enhanced category detection with minimum match threshold
-    let categoryScore = 0;
-    let bestCategory = 'general';
-    
-    for (const [cat, keywords] of Object.entries(categoryKeywords)) {
-      const matches = keywords.filter(keyword => {
-        // Use flexible matching - check for exact word matches and partial matches
-        const exactRegex = new RegExp(`\\b${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
-        const partialRegex = new RegExp(keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-        
-        // Prefer exact word matches, but also accept partial matches for Telugu text
-        return exactRegex.test(combinedText) || partialRegex.test(combinedText);
-      });
-      
-      // Calculate score based on number of matches and keyword length
-      // Give higher weight to exact matches
-      const score = matches.reduce((acc, keyword) => {
-        const exactMatch = new RegExp(`\\b${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(combinedText);
-        return acc + keyword.length + (exactMatch ? 5 : 0); // Bonus for exact matches
-      }, 0);
-      
-      if (score > categoryScore) {
-        categoryScore = score;
-        bestCategory = cat;
-      }
+    // Capitalize first letter if needed
+    if (category && category.length > 0) {
+      category = category.charAt(0).toUpperCase() + category.slice(1);
     }
-    
-    // Only use detected category if score is above threshold
-    // Lowered threshold to be more sensitive to category detection
-    if (categoryScore > 3) {
-      category = bestCategory;
-    }
-    
-    
-    // Capitalize first letter
-    category = category.charAt(0).toUpperCase() + category.slice(1);
 
     const views = a.viewCount || a.views || 0;
 
