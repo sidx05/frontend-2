@@ -33,6 +33,7 @@ export default function HomePage() {
   const [categoryArticles, setCategoryArticles] = useState<any[]>([]);
   const [languageSections, setLanguageSections] = useState<any[]>([]);
   const [uncategorizedArticles, setUncategorizedArticles] = useState<any[]>([]);
+  const [rssLatestNews, setRssLatestNews] = useState<any[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);  
 
   useEffect(() => {
@@ -49,10 +50,26 @@ export default function HomePage() {
     (async () => {
       try {
         // Fetch only essential data in parallel for faster initial load
-        const [rawArticles, trendingData] = await Promise.all([
+        const [rawArticles, trendingData, rssData] = await Promise.all([
           fetchArticles({ lang: 'en', limit: 12 }), // Limit initial fetch
-          fetchTrending().catch(() => [])
+          fetchTrending().catch(() => []),
+          fetch('https://www.thehindu.com/news/national/?service=rss')
+            .then(res => res.text())
+            .then(xml => {
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(xml, 'text/xml');
+              const items = Array.from(doc.querySelectorAll('item')).slice(0, 10);
+              return items.map(item => ({
+                title: item.querySelector('title')?.textContent || '',
+                link: item.querySelector('link')?.textContent || '',
+                pubDate: item.querySelector('pubDate')?.textContent || '',
+                description: item.querySelector('description')?.textContent || ''
+              }));
+            })
+            .catch(() => [])
         ]);
+        
+        if (mounted) setRssLatestNews(rssData);
         
         const articlesList = Array.isArray(rawArticles) ? rawArticles : [];
 
@@ -334,8 +351,54 @@ export default function HomePage() {
       <Navbar />
       <main className="pt-32 pb-16">
         <div className="container mx-auto px-4">
-          {/* Featured */}
-          <section className="mb-12">
+          {/* Welcome Banner - Reduced Height */}
+          <section className="mb-8">
+            <div className="relative h-48 md:h-64 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white">
+              <div className="text-center p-8">
+                <h1 className="text-3xl md:text-4xl font-bold mb-4">Welcome to NewsHub</h1>
+                <p className="text-lg md:text-xl mb-4 max-w-3xl">Stay updated with the latest news from around the world</p>
+                <Button variant="secondary" size="lg" onClick={() => router.push('/news')}>
+                  Explore News <ArrowRight className="h-4 w-4 ml-1" />
+                </Button>
+              </div>
+            </div>
+          </section>
+
+          {/* Latest News - Sliding RSS Feed */}
+          {rssLatestNews.length > 0 && (
+            <section className="mb-12">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-foreground">Latest News</h2>
+              </div>
+              <div className="relative overflow-hidden bg-muted/50 rounded-lg p-4">
+                <div className="flex gap-6 animate-scroll">
+                  {[...rssLatestNews, ...rssLatestNews].map((item, index) => (
+                    <a
+                      key={`rss-${index}`}
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-shrink-0 w-80 p-4 bg-background rounded-lg hover:shadow-md transition-shadow"
+                    >
+                      <h3 className="text-sm font-semibold line-clamp-2 mb-2 hover:text-primary transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
+                        {item.description.replace(/<[^>]*>/g, '')}
+                      </p>
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Clock className="h-3 w-3" />
+                        {new Date(item.pubDate).toLocaleDateString()}
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Featured (Removed - replaced by welcome banner) */}
+          <section className="mb-12 hidden">
             <div className="relative h-96 md:h-[500px] rounded-2xl overflow-hidden">
               {featuredArticles.length > 0 ? (
                 featuredArticles.map((article, index) => (
