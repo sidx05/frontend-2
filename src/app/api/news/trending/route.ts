@@ -33,9 +33,9 @@ export async function GET(request: NextRequest) {
       // Type assertion for TypeScript - we know fallbackSource exists here
       const sourceId = (fallbackSource as any)._id;
       
-      // Use fallback source
+      // Use fallback source - query by source.sourceId (embedded object)
       const articles = await Article.find({
-        source: sourceId,
+        'source.sourceId': sourceId,
         status: { $in: ['scraped', 'processed', 'published'] }
       })
         .sort({ publishedAt: -1, createdAt: -1 })
@@ -57,9 +57,9 @@ export async function GET(request: NextRequest) {
     // Type assertion for TypeScript - we know latestNewsSource exists here
     const sourceId = (latestNewsSource as any)._id;
     
-    // Get articles from the Latest News source
+    // Get articles from the Latest News source - query by source.sourceId (embedded object)
     const articles = await Article.find({
-      source: sourceId,
+      'source.sourceId': sourceId,
       status: { $in: ['scraped', 'processed', 'published'] }
     })
       .sort({ publishedAt: -1, createdAt: -1 })
