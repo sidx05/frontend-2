@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
         name: /The Hindu Latest News/i
       }).select('_id').lean();
       
-      if (!fallbackSource) {
+      if (!fallbackSource || !fallbackSource._id) {
         return NextResponse.json({
           success: true,
           articles: [],
