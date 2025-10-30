@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Clock, TrendingUp, Bookmark, Share2, Eye } from "lucide-react";
+import { ArrowRight, Clock, TrendingUp, Bookmark, Share2, Eye, Newspaper, Globe, Zap, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -35,7 +35,9 @@ export default function HomePage() {
   const [uncategorizedArticles, setUncategorizedArticles] = useState<any[]>([]);
   const [rssLatestNews, setRssLatestNews] = useState<any[]>([]);
   const [latestNewsLoading, setLatestNewsLoading] = useState(true);
-  const [currentSlide, setCurrentSlide] = useState(0);  
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [quickReads, setQuickReads] = useState<any[]>([]);
+  const [popularCategories, setPopularCategories] = useState<any[]>([]);  
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -131,6 +133,10 @@ export default function HomePage() {
           setTrendingTopics(computeTrendingFromArticles(articlesList).slice(0, 6));
         }
 
+        // Set quick reads (short articles for sidebar)
+        const shortArticles = mapped.filter(a => a.readTime && a.readTime.includes('1 min')).slice(0, 5);
+        setQuickReads(shortArticles.length > 0 ? shortArticles : mapped.slice(0, 5));
+
         // Load language sections in parallel - all languages
         const languages = ['en', 'hi', 'te', 'ta', 'bn', 'gu', 'mr'];
         const languageSectionsData: any[] = [];
@@ -183,6 +189,22 @@ export default function HomePage() {
         });
         
         if (mounted) setLanguageSections(validResults);
+        
+        // Extract popular categories from all articles
+        const categoryCount: Record<string, number> = {};
+        validResults.forEach((section: any) => {
+          section.articles.forEach((article: any) => {
+            const cat = article.category || 'General';
+            categoryCount[cat] = (categoryCount[cat] || 0) + 1;
+          });
+        });
+        
+        const topCategories = Object.entries(categoryCount)
+          .sort(([, a], [, b]) => b - a)
+          .slice(0, 6)
+          .map(([name, count]) => ({ name, count }));
+        
+        if (mounted) setPopularCategories(topCategories);
 
       } catch (err) {
         console.error("Error fetching articles:", err);
@@ -699,10 +721,218 @@ export default function HomePage() {
                   </Card>
                 </motion.div>
               )}
+
+              {/* Quick Reads Section */}
+              {quickReads.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.3 }}
+                >
+                  <Card className="border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+                    <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 px-6 py-4 border-b border-border/50">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-primary/10 backdrop-blur-sm">
+                          <Zap className="h-5 w-5 text-primary" />
+                        </div>
+                        <h3 className="text-lg font-bold text-foreground">Quick Reads</h3>
+                      </div>
+                    </div>
+                    <CardContent className="p-4 space-y-2">
+                      {quickReads.slice(0, 5).map((article: any, index: number) => (
+                        <motion.div
+                          key={`quick-read-${article.id || index}`}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.05 }}
+                        >
+                          <Link 
+                            href={`/article/${article.slug}`}
+                            className="block group"
+                          >
+                            <div className="p-2.5 rounded-lg hover:bg-accent/50 transition-all duration-200">
+                              <h4 className="text-sm font-medium line-clamp-2 group-hover:text-primary transition-colors leading-snug mb-1.5">
+                                {article.title}
+                              </h4>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <Badge variant="secondary" className="text-xs px-2 py-0">
+                                  {article.readTime}
+                                </Badge>
+                                <span>•</span>
+                                <span>{article.time}</span>
+                              </div>
+                            </div>
+                          </Link>
+                        </motion.div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+
+              {/* Popular Categories */}
+              {popularCategories.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.4 }}
+                >
+                  <Card className="border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+                    <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 px-6 py-4 border-b border-border/50">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-primary/10 backdrop-blur-sm">
+                          <Tag className="h-5 w-5 text-primary" />
+                        </div>
+                        <h3 className="text-lg font-bold text-foreground">Popular Categories</h3>
+                      </div>
+                    </div>
+                    <CardContent className="p-4">
+                      <div className="flex flex-wrap gap-2">
+                        {popularCategories.map((category: any, index: number) => (
+                          <motion.div
+                            key={`popular-cat-${category.name}-${index}`}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.3, delay: index * 0.05 }}
+                          >
+                            <Link href={`/news?category=${category.name.toLowerCase()}`}>
+                              <Badge 
+                                variant="outline" 
+                                className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors px-3 py-1.5 text-xs font-medium"
+                              >
+                                {category.name}
+                                <span className="ml-1.5 text-muted-foreground">({category.count})</span>
+                              </Badge>
+                            </Link>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+
+              {/* Languages Bar */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.5 }}
+              >
+                <Card className="border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+                  <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 px-6 py-4 border-b border-border/50">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10 backdrop-blur-sm">
+                        <Globe className="h-5 w-5 text-primary" />
+                      </div>
+                      <h3 className="text-lg font-bold text-foreground">Languages</h3>
+                    </div>
+                  </div>
+                  <CardContent className="p-4">
+                    <div className="grid grid-cols-2 gap-2">
+                      {['en', 'hi', 'te', 'ta', 'bn', 'gu'].map((lang, index) => (
+                        <motion.div
+                          key={`lang-${lang}`}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.3, delay: index * 0.05 }}
+                        >
+                          <Link href={`/news?lang=${lang}`}>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="w-full justify-start hover:bg-primary hover:text-primary-foreground transition-colors"
+                            >
+                              {getLanguageDisplayName(lang)}
+                            </Button>
+                          </Link>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </div>
 
             {/* Main Content Area */}
             <div className="lg:col-span-3">
+              {/* Articles Without Images - Featured General News */}
+              {uncategorizedArticles.length > 0 && (
+                <section className="mb-12">
+                  <div className="flex items-center justify-between border-b border-border pb-4 mb-6">
+                    <div className="flex items-center gap-3">
+                      <Newspaper className="h-6 w-6 text-primary" />
+                      <h2 className="text-2xl font-bold text-foreground">Featured Stories</h2>
+                    </div>
+                    <Link 
+                      href="/news" 
+                      className="text-primary hover:text-primary/80 font-medium text-sm transition-colors flex items-center gap-1 group"
+                    >
+                      <span>View All</span>
+                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {uncategorizedArticles.slice(0, 6).map((article: any, index: number) => (
+                      <motion.div
+                        key={`featured-general-${article.id || `fallback-${index}`}`}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: index * 0.1 }}
+                      >
+                        <Link href={`/article/${article.slug}`} className="group block">
+                          <Card className="h-full border border-border/50 hover:border-primary/30 hover:shadow-md transition-all duration-300">
+                            <CardContent className="p-5">
+                              <div className="flex items-start gap-4">
+                                {article.thumbnail ? (
+                                  <div className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden bg-muted">
+                                    <img 
+                                      src={article.thumbnail} 
+                                      alt={article.title}
+                                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="flex-shrink-0 w-24 h-24 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center border border-primary/20">
+                                    <Newspaper className="h-10 w-10 text-primary/40" />
+                                  </div>
+                                )}
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <Badge variant="secondary" className="text-xs">
+                                      {sanitizeText(article.category)}
+                                    </Badge>
+                                    <span className="text-xs text-muted-foreground">{article.time}</span>
+                                  </div>
+                                  <h3 className="font-bold text-base line-clamp-2 group-hover:text-primary transition-colors mb-2 leading-snug">
+                                    {article.title}
+                                  </h3>
+                                  <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                                    {article.summary}
+                                  </p>
+                                  <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground">
+                                    <div className="flex items-center gap-1">
+                                      <Eye className="h-3 w-3" />
+                                      <span>{article.readTime}</span>
+                                    </div>
+                                    {article.source?.name && (
+                                      <>
+                                        <span>•</span>
+                                        <span>{article.source.name}</span>
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
               {/* Language-Specific News Sections */}
               <div className="space-y-16">
                 {languageSections.map((section) => (
