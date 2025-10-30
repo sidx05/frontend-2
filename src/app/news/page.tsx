@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams, usePathname } from "next/navigation";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, Clock, Eye, Filter, Search, TrendingUp } from "lucide-react";
@@ -37,6 +37,7 @@ function sanitizeText(text: string | undefined | null): string {
 function NewsPageContent() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const router = useRouter();
   const [articles, setArticles] = useState<any[]>([]);
   const [textOnlyArticles, setTextOnlyArticles] = useState<any[]>([]);
   const [generalArticles, setGeneralArticles] = useState<any[]>([]);
@@ -461,7 +462,8 @@ function NewsPageContent() {
               onClick={() => {
                 const url = new URL(window.location.href);
                 url.searchParams.delete('category');
-                window.location.href = url.toString();
+                router.push(url.pathname + url.search);
+                setSelectedCategory('all');
               }}
               className="text-xs"
             >
@@ -477,7 +479,8 @@ function NewsPageContent() {
                   onClick={() => {
                     const url = new URL(window.location.href);
                     url.searchParams.set('category', cat.name);
-                    window.location.href = url.toString();
+                    router.push(url.pathname + url.search);
+                    setSelectedCategory(cat.name);
                   }}
                   className="text-xs"
                 >

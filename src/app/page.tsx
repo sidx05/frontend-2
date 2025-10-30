@@ -37,7 +37,6 @@ export default function HomePage() {
   const [latestNewsLoading, setLatestNewsLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [quickReads, setQuickReads] = useState<any[]>([]);
-  const [popularCategories, setPopularCategories] = useState<any[]>([]);
   const [moreStories, setMoreStories] = useState<any[]>([]);  
 
   useEffect(() => {
@@ -190,22 +189,6 @@ export default function HomePage() {
         });
         
         if (mounted) setLanguageSections(validResults);
-        
-        // Extract popular categories from all articles
-        const categoryCount: Record<string, number> = {};
-        validResults.forEach((section: any) => {
-          section.articles.forEach((article: any) => {
-            const cat = article.category || 'General';
-            categoryCount[cat] = (categoryCount[cat] || 0) + 1;
-          });
-        });
-        
-        const topCategories = Object.entries(categoryCount)
-          .sort(([, a], [, b]) => b - a)
-          .slice(0, 6)
-          .map(([name, count]) => ({ name, count }));
-        
-        if (mounted) setPopularCategories(topCategories);
         
         // Get articles without images for "More Stories" section
         const articlesWithoutImages: any[] = [];
@@ -776,53 +759,11 @@ export default function HomePage() {
                 </motion.div>
               )}
 
-              {/* Popular Categories */}
-              {popularCategories.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.4 }}
-                >
-                  <Card className="border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
-                    <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 px-6 py-4 border-b border-border/50">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-primary/10 backdrop-blur-sm">
-                          <Tag className="h-5 w-5 text-primary" />
-                        </div>
-                        <h3 className="text-lg font-bold text-foreground">Popular Categories</h3>
-                      </div>
-                    </div>
-                    <CardContent className="p-4">
-                      <div className="flex flex-wrap gap-2">
-                        {popularCategories.map((category: any, index: number) => (
-                          <motion.div
-                            key={`popular-cat-${category.name}-${index}`}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.3, delay: index * 0.05 }}
-                          >
-                            <Link href={`/news?category=${category.name.toLowerCase()}`}>
-                              <Badge 
-                                variant="outline" 
-                                className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors px-3 py-1.5 text-xs font-medium"
-                              >
-                                {category.name}
-                                <span className="ml-1.5 text-muted-foreground">({category.count})</span>
-                              </Badge>
-                            </Link>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              )}
-
               {/* Languages Bar */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.5 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
               >
                 <Card className="border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
                   <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 px-6 py-4 border-b border-border/50">
@@ -958,14 +899,15 @@ export default function HomePage() {
                     
                     {/* Category Filter Buttons */}
                     <div className="flex flex-wrap gap-2 mb-6">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => window.location.href = `/news?lang=${section.language}`}
-                        className="text-xs"
-                      >
-                        All
-                      </Button>
+                      <Link href={`/news?lang=${section.language}`}>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="text-xs"
+                        >
+                          All
+                        </Button>
+                      </Link>
                       {(() => {
                         const categories = Array.isArray(section.categories) ? section.categories : [];
                         // For Telugu, only show selected categories; others removed as requested
