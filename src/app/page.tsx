@@ -34,6 +34,7 @@ export default function HomePage() {
   const [languageSections, setLanguageSections] = useState<any[]>([]);
   const [uncategorizedArticles, setUncategorizedArticles] = useState<any[]>([]);
   const [rssLatestNews, setRssLatestNews] = useState<any[]>([]);
+  const [latestNewsLoading, setLatestNewsLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);  
 
   useEffect(() => {
@@ -45,21 +46,43 @@ export default function HomePage() {
     return () => clearInterval(t);
   }, [featuredArticles.length]);
 
-  // Fetch RSS Latest News
+  // Fetch RSS Latest News from database (trending category)
   useEffect(() => {
     let mounted = true;
-    (async () => {
+    
+    const fetchLatestNews = async () => {
       try {
-        const response = await fetch('/api/rss/latest');
+        setLatestNewsLoading(true);
+        const response = await fetch('/api/news/trending?limit=15');
         const data = await response.json();
-        if (mounted && data.success && data.items) {
-          setRssLatestNews(data.items);
+        if (mounted && data.success && data.articles && data.articles.length > 0) {
+          setRssLatestNews(data.articles);
+        } else if (mounted && data.articles) {
+          // Even if empty, clear the old data
+          setRssLatestNews([]);
         }
       } catch (error) {
-        console.error('Error fetching RSS feed:', error);
+        console.error('Error fetching latest news:', error);
+        if (mounted) {
+          setRssLatestNews([]);
+        }
+      } finally {
+        if (mounted) {
+          setLatestNewsLoading(false);
+        }
       }
-    })();
-    return () => { mounted = false; };
+    };
+    
+    // Initial fetch
+    fetchLatestNews();
+    
+    // Refresh every 5 minutes to get new articles
+    const intervalId = setInterval(fetchLatestNews, 5 * 60 * 1000);
+    
+    return () => { 
+      mounted = false;
+      clearInterval(intervalId);
+    };
   }, []);
 
   useEffect(() => {
@@ -366,7 +389,17 @@ export default function HomePage() {
           </section>
 
           {/* Latest News - Sliding RSS Feed Banner */}
-          {rssLatestNews.length > 0 && (
+          {latestNewsLoading ? (
+            <section className="mb-12">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-xl font-bold text-foreground">Latest News</h2>
+                <span className="text-sm text-muted-foreground">Loading...</span>
+              </div>
+              <div className="relative h-32 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center">
+                <div className="text-white text-sm">Loading latest news...</div>
+              </div>
+            </section>
+          ) : rssLatestNews.length > 0 ? (
             <section className="mb-12">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-xl font-bold text-foreground">Latest News</h2>
@@ -376,11 +409,9 @@ export default function HomePage() {
                 <div className="absolute inset-0 flex items-center">
                   <div className="flex gap-8 animate-scroll px-4">
                     {[...rssLatestNews, ...rssLatestNews].map((item, index) => (
-                      <a
+                      <Link
                         key={`rss-${index}`}
-                        href={item.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={`/article/${item.slug}`}
                         className="flex-shrink-0 w-96 text-white hover:opacity-90 transition-opacity"
                       >
                         <div className="flex items-start gap-3">
@@ -394,13 +425,13 @@ export default function HomePage() {
                             </p>
                           </div>
                         </div>
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
               </div>
             </section>
-          )}
+          ) : null}
 
           {/* Featured (Removed - replaced by welcome banner) */}
           <section className="mb-12 hidden">

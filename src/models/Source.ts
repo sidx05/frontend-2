@@ -13,6 +13,10 @@ export interface ISource extends Document {
   createdAt: Date;
   updatedAt: Date;
   type: 'rss' | 'api';
+  metadata?: {
+    isLatestNews?: boolean;
+    [key: string]: any;
+  };
 }
 
 const sourceSchema = new Schema<ISource>({
@@ -47,7 +51,11 @@ const sourceSchema = new Schema<ISource>({
   lastScraped: {
     type: Date
   },
-  type: { type: String, enum: ['rss', 'api'], default: 'rss' }
+  type: { type: String, enum: ['rss', 'api'], default: 'rss' },
+  metadata: {
+    type: Schema.Types.Mixed,
+    default: {}
+  }
 }, {
   timestamps: true
 });
