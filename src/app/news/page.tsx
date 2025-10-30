@@ -429,11 +429,11 @@ function NewsPageContent() {
           <div className="flex items-center gap-4 mb-4">
             <Link href="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
               <ArrowLeft className="h-4 w-4" />
-              Back to Home
+              Back
             </Link>
           </div>
           
-          <div className="flex items-center justify-between">
+          <div className="flex items-start justify-between">
             <div>
               <h1 className="text-4xl font-bold text-foreground mb-2">
                 {languageName} News

@@ -486,7 +486,7 @@ export default function HomePage() {
                     {/* Section Header */}
                     <div className="flex items-center justify-between border-b border-border pb-4">
                       <h2 className="text-2xl font-bold text-foreground">
-                        Latest {section.displayName} News
+                        {section.displayName} News
                       </h2>
                       <Link 
                         href={`/news?lang=${section.language}`} 
