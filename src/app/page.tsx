@@ -375,9 +375,9 @@ export default function HomePage() {
       <Navbar />
       <main className="pt-32 pb-16">
         <div className="container mx-auto px-4">
-          {/* Welcome Banner - Ultra Compact with Glass Effect */}
+          {/* Welcome Banner - Glass Effect with Increased Height */}
           <section className="mb-6">
-            <div className="relative h-20 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 border border-white/20 flex items-center justify-center">
+            <div className="relative h-24 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 border border-white/20 flex items-center justify-center">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20"></div>
               <div className="relative text-center px-6 py-3 flex items-center gap-4">
                 <div className="flex-1">
