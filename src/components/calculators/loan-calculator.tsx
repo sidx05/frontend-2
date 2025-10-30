@@ -71,18 +71,20 @@ export default function LoanCalculator({ type, onClose }: LoanCalculatorProps) {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-        <CardHeader className={`bg-gradient-to-r ${config.color} text-white relative`}>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            className="absolute top-4 right-4 text-white hover:bg-white/20"
-          >
-            <X className="h-5 w-5" />
-          </Button>
-          <div className="flex items-center gap-3">
-            <span className="text-4xl">{config.icon}</span>
-            <CardTitle className="text-2xl">{config.title}</CardTitle>
+        <CardHeader className={`bg-gradient-to-r ${config.color} text-white relative px-6 py-6`}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-4xl">{config.icon}</span>
+              <CardTitle className="text-2xl">{config.title}</CardTitle>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="text-white hover:bg-white/20 h-10 w-10 p-0"
+            >
+              <X className="h-5 w-5" />
+            </Button>
           </div>
         </CardHeader>
         
