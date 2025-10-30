@@ -90,8 +90,8 @@ export default function HomePage() {
           setTrendingTopics(computeTrendingFromArticles(articlesList).slice(0, 6));
         }
 
-        // Load language sections in parallel - all 8 languages
-        const languages = ['en', 'hi', 'te', 'ta', 'ml', 'bn', 'gu', 'mr'];
+        // Load language sections in parallel - all languages
+        const languages = ['en', 'hi', 'te', 'ta', 'bn', 'gu', 'mr'];
         const languageSectionsData: any[] = [];
         
         // Fetch all language sections in parallel instead of sequentially (keeps it fast)
