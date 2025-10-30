@@ -375,69 +375,88 @@ export default function HomePage() {
       <Navbar />
       <main className="pt-32 pb-16">
         <div className="container mx-auto px-4">
-          {/* Welcome Banner - Compact */}
+          {/* Welcome Banner - Ultra Compact with Glass Effect */}
           <section className="mb-6">
-            <div className="relative h-32 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white">
-              <div className="text-center px-8 py-4">
-                <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome to NewsHub</h1>
-                <p className="text-sm md:text-base mb-3 max-w-2xl">Stay updated with the latest news from around the world</p>
-                <Button variant="secondary" size="default" onClick={() => router.push('/news')}>
-                  Explore News <ArrowRight className="h-4 w-4 ml-1" />
+            <div className="relative h-20 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 border border-white/20 flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20"></div>
+              <div className="relative text-center px-6 py-3 flex items-center gap-4">
+                <div className="flex-1">
+                  <h1 className="text-xl md:text-2xl font-bold text-foreground mb-1">Welcome to NewsHub</h1>
+                  <p className="text-xs md:text-sm text-muted-foreground">Stay updated with the latest news from around the world</p>
+                </div>
+                <Button 
+                  variant="secondary" 
+                  size="sm" 
+                  onClick={() => router.push('/news')}
+                  className="bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20"
+                >
+                  Explore <ArrowRight className="h-3 w-3 ml-1" />
                 </Button>
               </div>
             </div>
           </section>
 
-          {/* Latest News - Sliding RSS Feed Banner */}
+          {/* Latest News - Professional Sleek Design */}
           {latestNewsLoading ? (
             <section className="mb-12">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-xl font-bold text-foreground">Latest News</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-foreground">Latest News</h2>
                 <span className="text-sm text-muted-foreground">Loading...</span>
               </div>
-              <div className="relative h-48 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center">
+              <div className="relative h-52 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-br from-slate-900/90 via-slate-800/90 to-slate-900/90 border border-white/10 flex items-center justify-center">
                 <div className="text-white text-sm">Loading latest news...</div>
               </div>
             </section>
           ) : rssLatestNews.length > 0 ? (
             <section className="mb-12">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-xl font-bold text-foreground">Latest News</h2>
-                <span className="text-sm text-muted-foreground">Business Standard • {rssLatestNews.length} stories</span>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-foreground">Latest News</h2>
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">Business Standard</span>
+                  <span className="text-sm text-muted-foreground">{rssLatestNews.length} stories</span>
+                </div>
               </div>
-              <div className="relative h-48 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-red-600">
+              <div className="relative h-52 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 border border-white/10 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10"></div>
                 <div className="absolute inset-0 flex items-center">
-                  <div className="flex gap-6 animate-scroll px-4">
+                  <div className="flex gap-6 animate-scroll px-6">
                     {[...rssLatestNews, ...rssLatestNews].map((item, index) => (
                       <Link
                         key={`rss-${index}`}
                         href={`/article/${item.slug}`}
-                        className="flex-shrink-0 w-[420px] bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition-all duration-300 border border-white/20"
+                        className="group flex-shrink-0 w-[440px] bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md rounded-xl p-5 hover:from-white/15 hover:to-white/10 transition-all duration-300 border border-white/10 hover:border-white/20 shadow-lg hover:shadow-xl"
                       >
                         <div className="flex items-start gap-4 h-full">
-                          {/* Placeholder Image */}
-                          <div className="flex-shrink-0 w-24 h-24 rounded-lg bg-white/20 overflow-hidden">
-                            <div className="w-full h-full flex items-center justify-center">
-                              <svg className="w-8 h-8 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                          {/* Modern Image Placeholder */}
+                          <div className="flex-shrink-0 w-28 h-28 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 overflow-hidden border border-white/10 group-hover:scale-105 transition-transform duration-300">
+                            <div className="w-full h-full flex items-center justify-center backdrop-blur-sm">
+                              <svg className="w-10 h-10 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                               </svg>
                             </div>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="text-sm font-bold text-white line-clamp-2 mb-2">
+                            <h3 className="text-base font-bold text-white line-clamp-2 mb-2 group-hover:text-blue-200 transition-colors">
                               {item.title}
                             </h3>
-                            <p className="text-xs text-white/80 line-clamp-2 mb-2">
+                            <p className="text-sm text-white/70 line-clamp-2 mb-3 leading-relaxed">
                               {item.description}
                             </p>
-                            <p className="text-xs text-white/60">
-                              {new Date(item.pubDate).toLocaleDateString('en-US', { 
-                                month: 'short', 
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                              })}
-                            </p>
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
+                                <svg className="w-3 h-3 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span className="text-xs text-white/70 font-medium">
+                                  {new Date(item.pubDate).toLocaleDateString('en-US', { 
+                                    month: 'short', 
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  })}
+                                </span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </Link>
@@ -448,16 +467,15 @@ export default function HomePage() {
             </section>
           ) : (
             <section className="mb-12">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-xl font-bold text-foreground">Latest News</h2>
-                <span className="text-sm text-muted-foreground">Business Standard</span>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-foreground">Latest News</h2>
+                <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">Business Standard</span>
               </div>
-              <div className="relative h-48 rounded-2xl overflow-hidden bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center">
-                <div className="text-white text-sm">
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="text-base font-semibold">No latest news available yet</div>
-                    <div className="text-xs opacity-80">Articles will appear here once scraped from Business Standard</div>
-                  </div>
+              <div className="relative h-52 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 border border-white/10 shadow-2xl flex items-center justify-center">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10"></div>
+                <div className="relative text-center">
+                  <div className="text-white/90 text-base font-semibold mb-2">No latest news available yet</div>
+                  <div className="text-white/60 text-sm">Articles will appear here once scraped from Business Standard</div>
                 </div>
               </div>
             </section>
