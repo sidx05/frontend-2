@@ -61,14 +61,15 @@ function NewsPageContent() {
   const languageName = language === 'all' ? 'All Languages' : (languageMap[language] || 'English');
   const categoryFromUrl = searchParams.get('category') || prettyCategory || 'all';
 
-  // Update selectedCategory when URL changes
+  // Update selectedCategory immediately from URL - no delay
   useEffect(() => {
     setSelectedCategory(categoryFromUrl);
+    setCurrentPage(1); // Reset to first page when category changes
   }, [categoryFromUrl]);
 
   useEffect(() => {
     loadArticles();
-  }, [language, selectedCategory, sortBy, currentPage, searchTerm]);
+  }, [language, categoryFromUrl, sortBy, currentPage, searchTerm]); // Use categoryFromUrl directly instead of selectedCategory
 
   // Sync search term from URL param `q` (from navbar search)
   useEffect(() => {
@@ -113,6 +114,9 @@ function NewsPageContent() {
   const loadArticles = async () => {
     setLoading(true);
     try {
+      // Use categoryFromUrl directly instead of selectedCategory state
+      const currentCategory = searchParams.get('category') || prettyCategory || 'all';
+      
       const params = new URLSearchParams({
         page: currentPage.toString(),
         limit: '30', // Set explicit limit for more articles per page
@@ -125,8 +129,8 @@ function NewsPageContent() {
         params.append('lang', language);
       }
 
-      if (selectedCategory !== 'all') {
-        params.append('category', selectedCategory);
+      if (currentCategory !== 'all') {
+        params.append('category', currentCategory);
       }
 
       if (searchTerm) {
@@ -456,36 +460,30 @@ function NewsPageContent() {
           
           {/* Category Filter Buttons */}
           <div className="flex flex-wrap gap-2 mt-6">
-            <Button 
-              variant={selectedCategory === 'all' ? 'default' : 'outline'} 
-              size="sm"
-              onClick={() => {
-                const url = new URL(window.location.href);
-                url.searchParams.delete('category');
-                router.push(url.pathname + url.search);
-                setSelectedCategory('all');
-              }}
-              className="text-xs"
-            >
-              All
-            </Button>            
+            <Link href={language !== 'all' ? `/news?lang=${language}` : '/news'}>
+              <Button 
+                variant={selectedCategory === 'all' ? 'default' : 'outline'} 
+                size="sm"
+                className="text-xs"
+              >
+                All
+              </Button>
+            </Link>
             {categories
               .slice(0, 8)
               .map((cat) => (
-                <Button 
-                  key={cat.name}
-                  variant={selectedCategory === cat.name ? 'default' : 'outline'} 
-                  size="sm"
-                  onClick={() => {
-                    const url = new URL(window.location.href);
-                    url.searchParams.set('category', cat.name);
-                    router.push(url.pathname + url.search);
-                    setSelectedCategory(cat.name);
-                  }}
-                  className="text-xs"
+                <Link 
+                  key={cat.name} 
+                  href={language !== 'all' ? `/news?lang=${language}&category=${cat.name}` : `/news?category=${cat.name}`}
                 >
-                  {cat.displayName}
-                </Button>
+                  <Button 
+                    variant={selectedCategory === cat.name ? 'default' : 'outline'} 
+                    size="sm"
+                    className="text-xs"
+                  >
+                    {cat.displayName}
+                  </Button>
+                </Link>
               ))}
           </div>
         </div>

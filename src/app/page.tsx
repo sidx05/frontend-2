@@ -915,15 +915,15 @@ export default function HomePage() {
                           ? categories.filter((c: any) => ['politics','entertainment','sports','health','andhra-pradesh','crime','business'].includes((c.key || c.name || '').toLowerCase()))
                           : categories;
                         return filtered.slice(0, 8).map((cat: any) => (
-                          <Button 
-                            key={cat.name}
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => window.location.href = `/news?lang=${section.language}&category=${cat.name}`}
-                            className="text-xs"
-                          >
-                            {cat.displayName}
-                          </Button>
+                          <Link key={cat.name} href={`/news?lang=${section.language}&category=${cat.name}`}>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              className="text-xs"
+                            >
+                              {cat.displayName}
+                            </Button>
+                          </Link>
                         ));
                       })()}
                     </div>
