@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
         name: /The Hindu Latest News/i
       }).select('_id').lean();
       
-      if (!fallbackSource || !fallbackSource._id) {
+      if (!fallbackSource) {
         return NextResponse.json({
           success: true,
           articles: [],
@@ -30,9 +30,12 @@ export async function GET(request: NextRequest) {
         });
       }
       
+      // Type assertion for TypeScript - we know fallbackSource exists here
+      const sourceId = (fallbackSource as any)._id;
+      
       // Use fallback source
       const articles = await Article.find({
-        source: fallbackSource._id,
+        source: sourceId,
         status: { $in: ['scraped', 'processed', 'published'] }
       })
         .sort({ publishedAt: -1, createdAt: -1 })
@@ -51,9 +54,12 @@ export async function GET(request: NextRequest) {
       });
     }
     
+    // Type assertion for TypeScript - we know latestNewsSource exists here
+    const sourceId = (latestNewsSource as any)._id;
+    
     // Get articles from the Latest News source
     const articles = await Article.find({
-      source: latestNewsSource._id,
+      source: sourceId,
       status: { $in: ['scraped', 'processed', 'published'] }
     })
       .sort({ publishedAt: -1, createdAt: -1 })
