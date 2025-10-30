@@ -70,8 +70,8 @@ export default function LoanCalculator({ type, onClose }: LoanCalculatorProps) {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto scrollbar-hide">
-        <CardHeader className={`bg-gradient-to-r ${config.color} text-white px-6 py-5`}>
+      <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto scrollbar-hide p-0">
+        <CardHeader className={`bg-gradient-to-r ${config.color} text-white px-6 py-5 m-0 rounded-t-lg`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="text-4xl">{config.icon}</span>
