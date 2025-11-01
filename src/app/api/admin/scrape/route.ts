@@ -10,7 +10,7 @@ export async function POST(_request: NextRequest) {
     let backendUrl = process.env.BACKEND_URL || `http://localhost:${process.env.BACKEND_PORT || '3001'}`;
     let token = process.env.BACKEND_ADMIN_TOKEN || process.env.ADMIN_TOKEN || '';
 
-    if ((!backendUrl || !token) && process.env.NODE_ENV !== 'production') {
+    if (!backendUrl || !token) {
       // Try DB settings if env not provided
       try {
         await connectDB();
