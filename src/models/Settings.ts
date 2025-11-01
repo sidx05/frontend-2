@@ -14,6 +14,10 @@ export interface ISettings extends Document {
   seoTitle: string;
   seoDescription: string;
   seoKeywords: string;
+  integrations?: {
+    backendUrl?: string;
+    backendAdminToken?: string;
+  };
   updatedAt: Date;
 }
 
@@ -30,7 +34,11 @@ const settingsSchema = new Schema<ISettings>({
   maintenanceMode: { type: Boolean, default: false },
   seoTitle: { type: String, default: 'NewsHub - Latest News' },
   seoDescription: { type: String, default: 'Stay updated with the latest news from around the world' },
-  seoKeywords: { type: String, default: 'news, latest, updates, world news, breaking news' }
+  seoKeywords: { type: String, default: 'news, latest, updates, world news, breaking news' },
+  integrations: {
+    backendUrl: { type: String, default: '' },
+    backendAdminToken: { type: String, default: '' },
+  }
 }, {
   timestamps: true
 });

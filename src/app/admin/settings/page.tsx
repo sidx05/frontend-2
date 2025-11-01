@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import AdminNav from '@/components/admin/AdminNav';
-import { Settings, Save, Database, Globe, Shield, Bell } from 'lucide-react';
+import { Settings as SettingsIcon, Save, Database, Globe, Shield, Bell, ServerCog } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminSettings() {
@@ -25,7 +25,11 @@ export default function AdminSettings() {
     maintenanceMode: false,
     seoTitle: 'NewsHub - Latest News',
     seoDescription: 'Stay updated with the latest news from around the world',
-    seoKeywords: 'news, latest, updates, world news, breaking news'
+    seoKeywords: 'news, latest, updates, world news, breaking news',
+    integrations: {
+      backendUrl: '',
+      backendAdminToken: ''
+    }
   });
 
   const [loading, setLoading] = useState(false);
@@ -81,13 +85,13 @@ export default function AdminSettings() {
       <div className="p-8 max-w-6xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Settings className="h-8 w-8" />
+            <SettingsIcon className="h-8 w-8" />
             Admin Settings
           </h1>
           <p className="text-muted-foreground">Configure your NewsHub application settings</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* General Settings */}
           <Card>
             <CardHeader>
@@ -251,6 +255,45 @@ export default function AdminSettings() {
                   value={settings.seoKeywords}
                   onChange={(e) => handleInputChange('seoKeywords', e.target.value)}
                 />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Backend Integration */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ServerCog className="h-5 w-5" />
+                Backend Integration
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="backendUrl">Backend URL</Label>
+                <Input
+                  id="backendUrl"
+                  placeholder="https://backend-2-71va.onrender.com"
+                  value={settings.integrations?.backendUrl || ''}
+                  onChange={(e) => setSettings(prev => ({
+                    ...prev,
+                    integrations: { ...(prev.integrations || {}), backendUrl: e.target.value }
+                  }))}
+                />
+                <p className="text-xs text-muted-foreground mt-1">Example: https://backend-2-71va.onrender.com</p>
+              </div>
+              <div>
+                <Label htmlFor="backendAdminToken">Backend Admin Token</Label>
+                <Input
+                  id="backendAdminToken"
+                  type="password"
+                  placeholder="Set this to match backend ADMIN_TOKEN"
+                  value={settings.integrations?.backendAdminToken || ''}
+                  onChange={(e) => setSettings(prev => ({
+                    ...prev,
+                    integrations: { ...(prev.integrations || {}), backendAdminToken: e.target.value }
+                  }))}
+                />
+                <p className="text-xs text-muted-foreground mt-1">Must equal ADMIN_TOKEN on Render backend</p>
               </div>
             </CardContent>
           </Card>
