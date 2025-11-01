@@ -7,8 +7,8 @@ import { Settings } from '@/models/Settings';
 export async function POST(_request: NextRequest) {
   try {
     // Auto-detect backend URL/token: prefer env, else read from Settings.integrations, else dev fallback
-    let backendUrl = process.env.BACKEND_URL || `http://localhost:${process.env.BACKEND_PORT || '3001'}`;
-    let token = process.env.BACKEND_ADMIN_TOKEN || process.env.ADMIN_TOKEN || '';
+  let backendUrl = (process.env.BACKEND_URL || `http://localhost:${process.env.BACKEND_PORT || '3001'}`).trim();
+  let token = (process.env.BACKEND_ADMIN_TOKEN || process.env.ADMIN_TOKEN || '').trim();
 
     if (!backendUrl || !token) {
       // Try DB settings if env not provided
@@ -16,10 +16,10 @@ export async function POST(_request: NextRequest) {
         await connectDB();
         const settings = (await Settings.findOne().lean()) as any;
         if (settings?.integrations?.backendUrl && !process.env.BACKEND_URL) {
-          backendUrl = settings.integrations.backendUrl as string;
+          backendUrl = String(settings.integrations.backendUrl).trim();
         }
         if (settings?.integrations?.backendAdminToken && !process.env.BACKEND_ADMIN_TOKEN && !process.env.ADMIN_TOKEN) {
-          token = settings.integrations.backendAdminToken as string;
+          token = String(settings.integrations.backendAdminToken).trim();
         }
       } catch (e) {
         // ignore DB fallback errors; will surface below
