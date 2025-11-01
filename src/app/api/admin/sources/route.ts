@@ -6,8 +6,8 @@ import { Source } from '@/models/Source';
 export async function GET() {
   try {
     await connectDB();
-    
-    const sources = await Source.find({}).populate('categories');
+    // Use lean() to return plain objects to avoid serialization issues
+    const sources = await Source.find({}).populate('categories').lean();
     
     // Get basic configuration summary
     const configSummary = {
@@ -20,7 +20,7 @@ export async function GET() {
     
     return NextResponse.json({
       success: true,
-      sources: sources,
+      sources,
       config: configSummary
     });
   } catch (error) {
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json({
       success: true,
-      source: newSource,
+      source: newSource.toObject(),
       message: 'Source added successfully'
     });
   } catch (error) {

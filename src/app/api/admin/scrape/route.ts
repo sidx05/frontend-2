@@ -4,14 +4,18 @@ import { NextRequest, NextResponse } from 'next/server';
 // This avoids exposing backend admin tokens to the browser.
 export async function POST(_request: NextRequest) {
   try {
+    // Auto-detect backend URL: use env or fallback to localhost:3001
     const backendUrl = process.env.BACKEND_URL || `http://localhost:${process.env.BACKEND_PORT || '3001'}`;
-    const token = process.env.BACKEND_ADMIN_TOKEN || process.env.ADMIN_TOKEN;
+    
+    // Try multiple token sources with clear fallback
+    const token = process.env.BACKEND_ADMIN_TOKEN || process.env.ADMIN_TOKEN || 'dev-auto-token';
 
-    if (!backendUrl) {
-      return NextResponse.json({ success: false, error: 'BACKEND_URL not configured' }, { status: 500 });
-    }
-    if (!token) {
-      return NextResponse.json({ success: false, error: 'BACKEND_ADMIN_TOKEN or ADMIN_TOKEN not configured' }, { status: 500 });
+    // Only fail if we're in production and no proper token is set
+    if (!token || (process.env.NODE_ENV === 'production' && token === 'dev-auto-token')) {
+      return NextResponse.json({ 
+        success: false, 
+        error: 'BACKEND_ADMIN_TOKEN not configured. Set it in Vercel env to match backend ADMIN_TOKEN.' 
+      }, { status: 500 });
     }
 
     const res = await fetch(`${backendUrl.replace(/\/$/, '')}/admin/scrape`, {
