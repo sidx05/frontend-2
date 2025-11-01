@@ -12,10 +12,18 @@ const DEFAULT_MONGO = "mongodb://localhost:27017/newshub";
  * - Returns a promise so callers can await the connection.
  */
 export default async function connectDB(): Promise<typeof mongoose> {
+  // Prefer explicit Mongo env vars; only use DATABASE_URL if it's a Mongo URI
+  const mongoFromDbUrl =
+    process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith("mongodb")
+      ? process.env.DATABASE_URL
+      : undefined;
+
   const uri =
-    process.env.DATABASE_URL ||
+    process.env.MONGODB_URI ||
     process.env.MONGO_URI ||
+    process.env.MONGODB_URL ||
     process.env.MONGO_URL ||
+    mongoFromDbUrl ||
     DEFAULT_MONGO;
 
   if (!uri) {
