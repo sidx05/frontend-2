@@ -1,23 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/database';
-// Note: Backend services are not available in frontend build
-// import { AdvancedScraperService } from '../../../../../backend/src/services/advanced-scraper.service';
-// import { SourceConfigService } from '../../../../../backend/src/services/source-config.service';
-// import { SchedulerService } from '../../../../../backend/src/services/scheduler.service';
 
-// POST /api/admin/sources/scrape - Trigger scraping
+// Proxy to backend /admin/scrape, forwarding the admin token as Bearer auth
 export async function POST(request: NextRequest) {
+  const backendBase = process.env.NEXT_PUBLIC_API_URL;
+  if (!backendBase) {
+    return NextResponse.json(
+      { success: false, error: 'Backend URL not configured (NEXT_PUBLIC_API_URL)' },
+      { status: 500 }
+    );
+  }
+
   try {
-    await connectDB();
-    
-    // Note: Backend services are not available in frontend build
-    // This endpoint would need to be implemented differently for production
-    return NextResponse.json({
-      success: false,
-      error: 'Scraping service not available in frontend build. Use backend API directly.'
-    }, { status: 501 });
+    const token = request.cookies.get('adminToken')?.value || request.headers.get('authorization')?.replace('Bearer ', '');
+    if (!token) {
+      return NextResponse.json({ success: false, error: 'Missing admin token' }, { status: 401 });
+    }
+
+    const res = await fetch(`${backendBase}/admin/scrape`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      return NextResponse.json({ success: false, error: data?.error || 'Scrape failed' }, { status: res.status });
+    }
+    return NextResponse.json(data);
   } catch (error) {
-    console.error('Error triggering scraping:', error);
+    console.error('Error proxying scrape:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to trigger scraping' },
       { status: 500 }
@@ -25,21 +37,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET /api/admin/sources/scrape/status - Get scraping status
-export async function GET() {
-  try {
-    await connectDB();
-    
-    // Note: Backend services are not available in frontend build
-    return NextResponse.json({
-      success: false,
-      error: 'Scraping status not available in frontend build. Use backend API directly.'
-    }, { status: 501 });
-  } catch (error) {
-    console.error('Error getting scraping status:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to get scraping status' },
-      { status: 500 }
-    );
-  }
+// Optional status proxy (not implemented on backend by default)
+export async function GET(request: NextRequest) {
+  return NextResponse.json({ success: false, error: 'Not implemented' }, { status: 501 });
 }

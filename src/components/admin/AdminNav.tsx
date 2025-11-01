@@ -21,6 +21,12 @@ const adminNavItems = [
     description: 'Manage news articles'
   },
   {
+    href: '/admin/sources',
+    label: 'Sources',
+    icon: FileText,
+    description: 'Manage RSS/API sources'
+  },
+  {
     href: '/admin/users',
     label: 'Users',
     icon: Users,
