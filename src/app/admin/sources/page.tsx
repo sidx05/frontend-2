@@ -114,13 +114,13 @@ export default function AdminSourcesPage() {
       setBusy(true);
       const res = await fetch('/api/admin/scrape', { method: 'POST' });
       const json = await res.json();
-      if (!res.ok || !json.success) {
+  if (!res.ok || !json.success) {
         // Enhanced error message for missing env
         const errorMsg = json.error || 'Failed to trigger scraping';
         if (errorMsg.includes('BACKEND_ADMIN_TOKEN') || errorMsg.includes('not configured')) {
           toast.error(`${errorMsg} Check console for details.`, { duration: 6000 });
           console.error('❌ Scrape failed. Make sure these env variables are set:');
-          console.error('  Frontend: BACKEND_URL (e.g., http://localhost:3001 or https://your-backend.onrender.com)');
+          console.error('  Frontend: BACKEND_URL (e.g., http://localhost:3001 or https://backend-2-71va.onrender.com/)');
           console.error('  Frontend: BACKEND_ADMIN_TOKEN (same value as backend ADMIN_TOKEN)');
           console.error('  Backend: ADMIN_TOKEN (a strong random token)');
         } else {
@@ -128,7 +128,8 @@ export default function AdminSourcesPage() {
         }
         return;
       }
-      toast.success(`Scrape started${json.count ? `: ${json.count} tasks` : ''}`);
+      const queued = json.queuedSources ?? json.count;
+      toast.success(`Scrape started${typeof queued === 'number' ? `: ${queued} source${queued === 1 ? '' : 's'}` : ''}`);
     } catch (err: any) {
       toast.error(err?.message || 'Failed to trigger scraping');
     } finally {
