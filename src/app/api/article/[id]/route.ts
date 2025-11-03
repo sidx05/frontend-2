@@ -9,7 +9,7 @@ function sanitizeText(text: string | undefined | null): string {
   return text.replace(/\b[0-9a-fA-F]{24}\b/g, '').trim();
 }
 
-// GET /api/article/:id - Proxy to backend API
+// GET /api/article/:id - Proxy to backend API and increment view count
 export async function GET(
   request: NextRequest,
   context: any
@@ -17,6 +17,13 @@ export async function GET(
   try {
   const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
   const _params = context?.params && typeof context.params.then === 'function' ? await context.params : context?.params;
+  
+  // Increment view count first (fire and forget)
+  fetch(`${backendUrl}/api/article/${_params?.id}/view`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  }).catch(err => console.error('Error incrementing view count:', err));
+  
   const response = await fetch(`${backendUrl}/api/article/${_params?.id}`, {
       headers: {
         'Content-Type': 'application/json',

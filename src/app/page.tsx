@@ -393,30 +393,9 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="pt-32 md:pt-32 pb-16">
+      <main className="pt-24 md:pt-28 pb-16">
         <div className="container mx-auto px-4">
-          {/* Welcome Banner - Glass Effect with Responsive Height */}
-          <section className="mt-6 md:mt-4 mb-6 md:mb-8">
-            <div className="relative h-16 md:h-24 rounded-2xl overflow-hidden backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 border border-white/20 flex items-center justify-center">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20"></div>
-              <div className="relative text-center px-4 md:px-6 py-2 md:py-3 flex items-center gap-2 md:gap-4">
-                <div className="flex-1">
-                  <h1 className="text-base md:text-xl lg:text-2xl font-bold text-foreground mb-0.5 md:mb-1">Welcome to NewsHub</h1>
-                  <p className="text-[10px] md:text-xs lg:text-sm text-muted-foreground hidden sm:block">Stay updated with the latest news from around the world</p>
-                </div>
-                <Button 
-                  variant="secondary" 
-                  size="sm" 
-                  onClick={() => router.push('/news')}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 text-xs md:text-sm px-2 md:px-4"
-                >
-                  Explore <ArrowRight className="h-3 w-3 ml-1" />
-                </Button>
-              </div>
-            </div>
-          </section>
-
-          {/* Latest News - Professional Sleek Design */}
+          {/* Latest News - Professional Sleek Design with adjusted top spacing */}
           {latestNewsLoading ? (
             <section className="mb-6 md:mb-12">
               <div className="flex items-center justify-between mb-3 md:mb-4">

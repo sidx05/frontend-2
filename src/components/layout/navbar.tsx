@@ -32,6 +32,9 @@ export function Navbar() {
     { code: 'mr', name: 'Marathi', native: 'मराठी' }
   ];
 
+  const [languageCategories, setLanguageCategories] = useState<Record<string, any[]>>({});
+  const [hoveredLanguage, setHoveredLanguage] = useState<string | null>(null);
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -46,6 +49,28 @@ export function Navbar() {
     return () => {
       mounted = false;
     };
+  }, []);
+
+  // Fetch categories for each language
+  useEffect(() => {
+    const fetchLanguageCategories = async () => {
+      const langCats: Record<string, any[]> = {};
+      await Promise.all(
+        languages.map(async (lang) => {
+          try {
+            const response = await fetch(`/api/categories?lang=${lang.code}`);
+            const data = await response.json();
+            if (data.success && data.categories) {
+              langCats[lang.code] = data.categories;
+            }
+          } catch (error) {
+            console.error(`Error fetching categories for ${lang.code}:`, error);
+          }
+        })
+      );
+      setLanguageCategories(langCats);
+    };
+    fetchLanguageCategories();
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -95,6 +120,40 @@ export function Navbar() {
           </div>
 
           {/* Desktop Categories removed as requested */}
+          
+          {/* Desktop Language Menu with Category Dropdowns */}
+          <div className="hidden md:flex items-center gap-1">
+            {languages.map((lang) => (
+              <div
+                key={lang.code}
+                className="relative group"
+                onMouseEnter={() => setHoveredLanguage(lang.code)}
+                onMouseLeave={() => setHoveredLanguage(null)}
+              >
+                <button
+                  onClick={() => router.push(`/news?lang=${lang.code}`)}
+                  className="px-3 py-2 text-sm font-medium rounded-lg hover:bg-accent transition-colors"
+                >
+                  {lang.native}
+                </button>
+                
+                {/* Category Dropdown */}
+                {hoveredLanguage === lang.code && languageCategories[lang.code] && languageCategories[lang.code].length > 0 && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-background border border-border rounded-lg shadow-lg py-2 z-50">
+                    {languageCategories[lang.code].slice(0, 8).map((category: any) => (
+                      <Link
+                        key={category._id || category.key}
+                        href={`/news?lang=${lang.code}&category=${category.key || category.name}`}
+                        className="block px-4 py-2 text-sm hover:bg-accent transition-colors"
+                      >
+                        {category.label || category.displayName || category.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
 
           {/* Search + Theme + Mobile */}
           <div className="flex items-center space-x-2">
