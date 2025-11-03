@@ -851,12 +851,6 @@ export default function HomePage() {
                                       <Eye className="h-3 w-3" />
                                       <span>{article.readTime}</span>
                                     </div>
-                                    {article.source?.name && (
-                                      <>
-                                        <span>•</span>
-                                        <span>{article.source.name}</span>
-                                      </>
-                                    )}
                                   </div>
                                 </div>
                               </div>

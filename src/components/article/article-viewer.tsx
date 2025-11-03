@@ -109,10 +109,27 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
             )}
 
             <div className="prose prose-lg max-w-none mb-8">
-              <div 
-                className="text-foreground leading-relaxed space-y-4 [&_p]:mb-4 [&_p]:text-base [&_p]:leading-7 [&_p]:text-justify [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-8 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mb-4 [&_h2]:mt-6 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mb-3 [&_h3]:mt-4 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_li]:mb-2 [&_blockquote]:border-l-4 [&_blockquote]:border-primary [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-4"
-                dangerouslySetInnerHTML={{ __html: article.content || "" }} 
-              />
+              {article.content && article.content.trim() && !article.content.includes('Reference #') && !article.content.includes('errors.edgesuite.net') ? (
+                <div 
+                  className="text-foreground leading-relaxed space-y-4 [&_p]:mb-4 [&_p]:text-base [&_p]:leading-7 [&_p]:text-justify [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-8 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mb-4 [&_h2]:mt-6 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mb-3 [&_h3]:mt-4 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_li]:mb-2 [&_blockquote]:border-l-4 [&_blockquote]:border-primary [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-4"
+                  dangerouslySetInnerHTML={{ __html: article.content }} 
+                />
+              ) : (
+                <div className="bg-muted/50 rounded-lg p-8 text-center">
+                  <p className="text-muted-foreground mb-4">
+                    {article.summary || "Content is currently unavailable for this article."}
+                  </p>
+                  {article.source?.url && (
+                    <Button 
+                      variant="outline" 
+                      onClick={() => window.open(article.source.url, '_blank')}
+                      className="mt-4"
+                    >
+                      Read on {article.source?.name || 'Original Source'}
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="flex items-center justify-between py-6 border-t border-border">
