@@ -68,44 +68,6 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
                 <div className="flex items-center gap-1"><Eye className="h-4 w-4" />{views.toLocaleString()} views</div>
               </div>
 
-              {/* Article Metadata */}
-              <Card className="mb-6 bg-muted/50">
-                <CardContent className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-muted-foreground">Source:</span>
-                        <span>{article.source?.name || 'Unknown'}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-muted-foreground">Published:</span>
-                        <span>{formatDate(article.publishedAt || article.createdAt)}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-muted-foreground">Language:</span>
-                        <Badge variant="outline" className="text-xs">
-                          {article.language || 'English'}
-                        </Badge>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      {article.scrapedAt && (
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-muted-foreground">Scraped:</span>
-                          <span className="text-xs">{formatDate(article.scrapedAt)}</span>
-                        </div>
-                      )}
-                      {article.wordCount && (
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-muted-foreground">Words:</span>
-                          <span>{article.wordCount.toLocaleString()}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
               {article.tags && (
                 <div className="flex flex-wrap gap-2 mb-6">
                   {article.tags.map((tag: string) => (
@@ -147,7 +109,10 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
             )}
 
             <div className="prose prose-lg max-w-none mb-8">
-              <div className="[&_h3]:text-2xl [&_h3]:font-bold [&_h3]:mb-4 [&_h3]:mt-8 [&_p]:text-base [&_p]:leading-relaxed [&_p]:mb-4" dangerouslySetInnerHTML={{ __html: article.content || "" }} />
+              <div 
+                className="text-foreground leading-relaxed space-y-4 [&_p]:mb-4 [&_p]:text-base [&_p]:leading-7 [&_p]:text-justify [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-8 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mb-4 [&_h2]:mt-6 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mb-3 [&_h3]:mt-4 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_li]:mb-2 [&_blockquote]:border-l-4 [&_blockquote]:border-primary [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-4"
+                dangerouslySetInnerHTML={{ __html: article.content || "" }} 
+              />
             </div>
 
             <div className="flex items-center justify-between py-6 border-t border-border">
@@ -174,9 +139,9 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm"><Heart className="h-4 w-4 mr-1" />{likes.toLocaleString()}</Button>
-                <Button variant="ghost" size="sm"><MessageCircle className="h-4 w-4 mr-1" />{commentsCount.toLocaleString()}</Button>
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1"><Heart className="h-4 w-4" />{likes.toLocaleString()}</div>
+                <div className="flex items-center gap-1"><MessageCircle className="h-4 w-4" />{commentsCount.toLocaleString()}</div>
               </div>
             </div>
 
