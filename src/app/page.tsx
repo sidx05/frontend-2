@@ -949,10 +949,7 @@ export default function HomePage() {
                               </p>
                               
                               {/* Article Footer */}
-                              <div className="flex items-center justify-between pt-2 border-t border-border/50">
-                                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                  <span className="font-medium">{article.source?.name || 'Unknown'}</span>
-                                </div>
+                              <div className="flex items-center justify-end pt-2 border-t border-border/50">
                                 <div className="flex items-center gap-1">
                                   <Button variant="ghost" size="sm" className="h-6 w-6 p-0 hover:bg-accent">
                                     <Bookmark className="h-3 w-3" />
