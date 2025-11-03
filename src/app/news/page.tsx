@@ -600,7 +600,7 @@ function NewsPageContent() {
                           {mappedArticle.summary}
                         </p>
                         
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <div className="flex items-center justify-start text-xs text-muted-foreground">
                           <div className="flex items-center gap-3">
                             <div className="flex items-center gap-1">
                               <Clock className="h-3 w-3" />
@@ -611,7 +611,6 @@ function NewsPageContent() {
                               {mappedArticle.readTime}
                             </div>
                           </div>
-                          <span>{mappedArticle.source}</span>
                         </div>
                       </CardContent>
                     </Card>
