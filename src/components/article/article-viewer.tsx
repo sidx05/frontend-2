@@ -38,12 +38,25 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
           url += `&exclude=${currentId}`;
         }
         
+        console.log('=== Fetching Related Articles ===');
+        console.log('Current article ID:', currentId);
+        console.log('Fetch URL:', url);
+        
         const response = await fetch(url);
+        console.log('Response status:', response.status, response.statusText);
+        
         if (response.ok) {
           const data = await response.json();
+          console.log('API Response:', data);
+          
           if (data.success && data.data) {
+            console.log('Related articles found:', data.data.length);
             setRelatedArticles(data.data.slice(0, 6));
+          } else {
+            console.warn('No data in response or success is false');
           }
+        } else {
+          console.error('Response not OK:', await response.text());
         }
       } catch (error) {
         console.error('Error fetching related articles:', error);
