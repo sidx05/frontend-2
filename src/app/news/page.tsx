@@ -64,8 +64,18 @@ function NewsPageContent() {
   // Helper function to get category display name
   const getCategoryDisplayName = () => {
     if (selectedCategory === 'all') return '';
-    const category = categories.find(cat => cat.name === selectedCategory || cat.key === selectedCategory);
-    return category ? (category.displayName || category.label || category.name) : selectedCategory;
+    const isObjectId = (val: string) => /^[0-9a-fA-F]{24}$/.test(val);
+    const category = categories.find(
+      (cat) =>
+        cat.name === selectedCategory ||
+        cat.key === selectedCategory ||
+        String(cat._id) === selectedCategory ||
+        String(cat.id) === selectedCategory
+    );
+    if (category) return category.displayName || category.label || category.name || category.key;
+    // Avoid flashing raw ObjectId before categories load
+    if (isObjectId(selectedCategory)) return '';
+    return selectedCategory;
   };
 
   // Update selectedCategory immediately from URL - no delay
@@ -73,6 +83,20 @@ function NewsPageContent() {
     setSelectedCategory(categoryFromUrl);
     setCurrentPage(1); // Reset to first page when category changes
   }, [categoryFromUrl]);
+
+  // When categories load, map ObjectId-like category to its canonical name to prevent future flashes
+  useEffect(() => {
+    const isObjectId = (val: string) => /^[0-9a-fA-F]{24}$/.test(val);
+    if (!categories?.length) return;
+    if (selectedCategory !== 'all' && isObjectId(selectedCategory)) {
+      const match = categories.find(
+        (cat) => String(cat._id) === selectedCategory || String(cat.id) === selectedCategory
+      );
+      if (match && match.name && match.name !== selectedCategory) {
+        setSelectedCategory(match.name);
+      }
+    }
+  }, [categories, selectedCategory]);
 
   useEffect(() => {
     loadArticles();
