@@ -60,6 +60,13 @@ function NewsPageContent() {
   const language = searchParams.get('lang') || prettyLangMap[prettyLang] || 'all';
   const languageName = language === 'all' ? 'All Languages' : (languageMap[language] || 'English');
   const categoryFromUrl = searchParams.get('category') || prettyCategory || 'all';
+  
+  // Helper function to get category display name
+  const getCategoryDisplayName = () => {
+    if (selectedCategory === 'all') return '';
+    const category = categories.find(cat => cat.name === selectedCategory || cat.key === selectedCategory);
+    return category ? (category.displayName || category.label || category.name) : selectedCategory;
+  };
 
   // Update selectedCategory immediately from URL - no delay
   useEffect(() => {
@@ -441,15 +448,15 @@ function NewsPageContent() {
             <div>
               <h1 className="text-4xl font-bold text-foreground mb-2">
                 {languageName} News
-                {selectedCategory !== 'all' && (
+                {selectedCategory !== 'all' && getCategoryDisplayName() && (
                   <span className="text-2xl text-muted-foreground ml-2">
-                    - {selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)}
+                    - {getCategoryDisplayName()}
                   </span>
                 )}
               </h1>
               <p className="text-muted-foreground">
                 Latest news and updates in {languageName}
-                {selectedCategory !== 'all' && ` - ${selectedCategory} category`}
+                {selectedCategory !== 'all' && getCategoryDisplayName() && ` - ${getCategoryDisplayName()} category`}
               </p>
             </div>
             
