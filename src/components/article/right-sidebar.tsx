@@ -155,7 +155,9 @@ export function RightSidebar() {
                   <div className="border-b border-border pb-3 last:border-0 last:pb-0 hover:bg-muted/50 rounded p-2 cursor-pointer transition-colors">
                     <h4 className="font-semibold text-sm mb-1 line-clamp-2">{item.title}</h4>
                     <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span>{item.category}</span>
+                      {item.category && typeof item.category === 'object' && (item.category.label || item.category.name) && (
+                        <span>{item.category.label || item.category.name}</span>
+                      )}
                       <span>{item.time}</span>
                     </div>
                   </div>

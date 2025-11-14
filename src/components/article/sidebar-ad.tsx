@@ -165,9 +165,11 @@ export function TrendingArticle({ article, onClick }: { article: any; onClick?: 
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <Badge variant="secondary" className="mb-1 text-xs">
-                {article.category?.label || article.category || "News"}
-              </Badge>
+              {article.category && typeof article.category === 'object' && (article.category.label || article.category.name) && (
+                <Badge variant="secondary" className="mb-1 text-xs">
+                  {article.category.label || article.category.name}
+                </Badge>
+              )}
               <h4 className="font-semibold text-sm mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                 {article.title}
               </h4>
