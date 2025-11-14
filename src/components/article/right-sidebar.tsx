@@ -1,6 +1,6 @@
 "use client";
 
-import { SidebarAd, TrendingArticle } from "./sidebar-ad";
+import { SidebarAd, TrendingArticle } from "@/components/article/sidebar-ad";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Star, Calendar } from "lucide-react";
 import { motion } from "framer-motion";

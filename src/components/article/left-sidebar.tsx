@@ -1,6 +1,6 @@
 "use client";
 
-import { SidebarAd, NewsletterSignup } from "./sidebar-ad";
+import { SidebarAd, NewsletterSignup } from "@/components/article/sidebar-ad";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Award, Zap } from "lucide-react";
 import { motion } from "framer-motion";
