@@ -27,21 +27,27 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [relatedArticles, setRelatedArticles] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch related articles - try trending articles as fallback
+    // Reset and fetch new related articles when article changes
+    setRelatedArticles([]);
+    setIsLoading(true);
+    
     const fetchRelatedArticles = async () => {
       try {
-        const currentId = article._id || article.id;
+        const currentId = String(article._id || article.id);
         
-        // Try to fetch from articles API first
-        let url = '/api/articles?limit=8';
+        console.log('=== Fetching Related Articles ===');
+        console.log('Current article ID:', currentId);
+        console.log('Current article language:', article.language);
+        
+        // Try to fetch from articles API first with higher limit for better randomization
+        let url = '/api/articles?limit=20';
         if (currentId) {
           url += `&exclude=${currentId}`;
         }
         
-        console.log('=== Fetching Related Articles ===');
-        console.log('Current article ID:', currentId);
         console.log('Fetch URL:', url);
         
         let response = await fetch(url);
@@ -52,19 +58,37 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
           console.log('Articles API Response:', data);
           
           if (data.success && data.data && data.data.length > 0) {
-            console.log('Related articles found from articles API:', data.data.length);
-            // Filter out current article and take 6
-            const filtered = data.data.filter((a: any) => 
-              String(a._id || a.id) !== String(currentId)
-            ).slice(0, 6);
-            setRelatedArticles(filtered);
+            console.log('Articles found from API:', data.data.length);
+            
+            // Filter out current article
+            let filtered = data.data.filter((a: any) => 
+              String(a._id || a.id) !== currentId
+            );
+            
+            // Shuffle array for randomization
+            filtered = filtered.sort(() => Math.random() - 0.5);
+            
+            // Try to get articles from different languages first
+            const currentLang = article.language;
+            const differentLang = filtered.filter((a: any) => a.language !== currentLang);
+            const sameLang = filtered.filter((a: any) => a.language === currentLang);
+            
+            // Prioritize different languages but include same language if not enough
+            const mixed = [
+              ...differentLang.slice(0, 4),
+              ...sameLang.slice(0, 2)
+            ].slice(0, 6);
+            
+            console.log('Selected articles:', mixed.length, 'different languages:', differentLang.slice(0, 4).length);
+            setRelatedArticles(mixed);
+            setIsLoading(false);
             return;
           }
         }
         
-        // Fallback to trending articles
+        // Fallback to trending articles with randomization
         console.log('Falling back to trending articles...');
-        response = await fetch('/api/trending?limit=8');
+        response = await fetch('/api/trending?limit=20');
         
         if (response.ok) {
           const data = await response.json();
@@ -72,32 +96,28 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
           
           if (data.success && data.data && data.data.length > 0) {
             // Filter out current article
-            const filtered = data.data.filter((a: any) => 
-              String(a._id || a.id) !== String(currentId)
-            ).slice(0, 6);
-            console.log('Using trending articles as related:', filtered.length);
-            setRelatedArticles(filtered);
+            let filtered = data.data.filter((a: any) => 
+              String(a._id || a.id) !== currentId
+            );
+            
+            // Shuffle for randomization
+            filtered = filtered.sort(() => Math.random() - 0.5);
+            
+            // Get diverse selection
+            const selected = filtered.slice(0, 6);
+            console.log('Using shuffled trending articles as related:', selected.length);
+            setRelatedArticles(selected);
           }
         }
+        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching related articles:', error);
-        // Last fallback - try trending one more time
-        try {
-          const response = await fetch('/api/trending?limit=6');
-          if (response.ok) {
-            const data = await response.json();
-            if (data.success && data.data) {
-              setRelatedArticles(data.data);
-            }
-          }
-        } catch (e) {
-          console.error('All fallbacks failed:', e);
-        }
+        setIsLoading(false);
       }
     };
 
     fetchRelatedArticles();
-  }, [article._id, article.id]);
+  }, [article._id, article.id, article.slug, article.title]); // Added more dependencies to force re-fetch
 
   const handleBookmark = () => setIsBookmarked(!isBookmarked);
   const handleShare = (platform: string) => {
@@ -261,7 +281,7 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
                     )}
                   </div>
                   
-                  {relatedArticles.length === 0 ? (
+                  {isLoading || relatedArticles.length === 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {[1, 2, 3, 4, 5, 6].map((n) => (
                         <Card key={n} className="overflow-hidden animate-pulse">
