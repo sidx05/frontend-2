@@ -312,7 +312,7 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
                                 </div>
                               )}
                               <CardContent className="p-5 space-y-3">
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 flex-wrap">
                                   <Badge variant="secondary" className="text-xs font-semibold">
                                     {ra.category?.label || ra.category?.name || ra.category || "General"}
                                   </Badge>
@@ -337,7 +337,7 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
                                       {ra.readTime}
                                     </span>
                                   )}
-                                  {ra.viewCount && (
+                                  {ra.viewCount !== undefined && (
                                     <span className="flex items-center gap-1">
                                       <Eye className="h-3 w-3" />
                                       {ra.viewCount.toLocaleString()}
