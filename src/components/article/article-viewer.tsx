@@ -313,9 +313,11 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
                               )}
                               <CardContent className="p-5 space-y-3">
                                 <div className="flex items-center gap-2 flex-wrap">
-                                  <Badge variant="secondary" className="text-xs font-semibold">
-                                    {ra.category?.label || ra.category?.name || ra.category || "General"}
-                                  </Badge>
+                                  {ra.category && typeof ra.category === 'object' && (ra.category.label || ra.category.name) && (
+                                    <Badge variant="secondary" className="text-xs font-semibold">
+                                      {ra.category.label || ra.category.name}
+                                    </Badge>
+                                  )}
                                   {ra.language && ra.language !== article.language && (
                                     <Badge variant="outline" className="text-xs">
                                       {ra.language.toUpperCase()}
