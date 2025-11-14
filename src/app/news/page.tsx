@@ -881,6 +881,129 @@ function NewsPageContent() {
                 </CardContent>
               </Card>
             )}
+
+            {/* Quick Links Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.4 }}
+            >
+              <Card className="border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+                <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 px-6 py-4 border-b border-border/50">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-primary/10 backdrop-blur-sm">
+                      <svg className="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold text-foreground">Quick Access</h3>
+                  </div>
+                </div>
+                <CardContent className="p-4 space-y-2">
+                  {[
+                    { label: 'Breaking News', icon: '🔥', href: '/latest-news' },
+                    { label: 'Live Updates', icon: '📡', href: '/latest-news' },
+                    { label: 'Video News', icon: '📹', href: '/news' },
+                    { label: 'Photo Gallery', icon: '📸', href: '/news' },
+                    { label: 'Podcasts', icon: '🎙️', href: '/news' },
+                    { label: 'Opinion', icon: '💭', href: '/news' }
+                  ].map((item, index) => (
+                    <motion.div
+                      key={`quick-link-${item.label}`}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                    >
+                      <Link href={item.href}>
+                        <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 transition-colors cursor-pointer group">
+                          <span className="text-xl">{item.icon}</span>
+                          <span className="font-medium text-sm group-hover:text-primary transition-colors">
+                            {item.label}
+                          </span>
+                          <svg className="ml-auto h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Advertisement Banner */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.5 }}
+            >
+              <Card className="border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden bg-gradient-to-br from-blue-500/10 to-purple-500/10">
+                <CardContent className="p-0">
+                  <div className="aspect-[4/5] relative overflow-hidden">
+                    <img 
+                      src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=500&fit=crop" 
+                      alt="Partner with us" 
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <Badge variant="secondary" className="mb-3 text-xs">Featured Partner</Badge>
+                      <h3 className="text-white font-bold text-xl mb-2">Advertise Here</h3>
+                      <p className="text-white/90 text-sm mb-4">Premium placement for your brand</p>
+                      <Button size="sm" className="w-full bg-white text-black hover:bg-white/90">
+                        Get Started →
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Language Switcher */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.6 }}
+            >
+              <Card className="border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+                <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 px-6 py-4 border-b border-border/50">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-primary/10 backdrop-blur-sm">
+                      <svg className="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold text-foreground">Other Languages</h3>
+                  </div>
+                </div>
+                <CardContent className="p-4">
+                  <div className="grid grid-cols-2 gap-2">
+                    {['Telugu', 'Hindi', 'Tamil', 'Bengali', 'Gujarati', 'Marathi'].filter(lang => lang.toLowerCase() !== language).map((lang, index) => (
+                      <motion.div
+                        key={`lang-switch-${lang}`}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3, delay: index * 0.05 }}
+                      >
+                        <Link href={`/news?lang=${lang.toLowerCase()}`}>
+                          <div className="border border-border/50 rounded-lg p-3 text-center hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 cursor-pointer hover:scale-105">
+                            <div className="font-semibold text-sm">{lang}</div>
+                          </div>
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
+                  <div className="mt-4 pt-4 border-t">
+                    <Link href="/news" className="text-sm text-primary hover:underline flex items-center justify-center gap-2">
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                      </svg>
+                      View All Languages
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </main>

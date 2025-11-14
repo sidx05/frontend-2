@@ -9,6 +9,7 @@ import { ArrowRight, Clock, TrendingUp, Bookmark, Share2, Eye, Newspaper, Globe,
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import WeatherWidget from "@/components/weather/weather-widget";
@@ -783,6 +784,109 @@ export default function HomePage() {
                           </Button>
                         </motion.div>
                       ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {/* Advertisement Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.5 }}
+              >
+                <Card className="border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden bg-gradient-to-br from-primary/5 to-primary/10">
+                  <CardContent className="p-0">
+                    <div className="aspect-square relative overflow-hidden">
+                      <img 
+                        src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=400&fit=crop" 
+                        alt="Advertisement" 
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <Badge variant="secondary" className="mb-2 text-xs">Sponsored</Badge>
+                        <h3 className="text-white font-bold text-lg mb-1">Grow Your Business</h3>
+                        <p className="text-white/90 text-sm mb-3">Reach millions of readers worldwide</p>
+                        <Button size="sm" variant="secondary" className="w-full">
+                          Learn More →
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {/* Popular Categories */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.6 }}
+              >
+                <Card className="border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+                  <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 px-6 py-4 border-b border-border/50">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10 backdrop-blur-sm">
+                        <svg className="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-bold text-foreground">Popular Categories</h3>
+                    </div>
+                  </div>
+                  <CardContent className="p-4">
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { name: 'Politics', count: '1.2k', color: 'bg-red-500/10 hover:bg-red-500/20 border-red-500/20 text-red-600' },
+                        { name: 'Technology', count: '856', color: 'bg-blue-500/10 hover:bg-blue-500/20 border-blue-500/20 text-blue-600' },
+                        { name: 'Sports', count: '742', color: 'bg-green-500/10 hover:bg-green-500/20 border-green-500/20 text-green-600' },
+                        { name: 'Entertainment', count: '698', color: 'bg-purple-500/10 hover:bg-purple-500/20 border-purple-500/20 text-purple-600' },
+                        { name: 'Business', count: '534', color: 'bg-orange-500/10 hover:bg-orange-500/20 border-orange-500/20 text-orange-600' },
+                        { name: 'Health', count: '421', color: 'bg-pink-500/10 hover:bg-pink-500/20 border-pink-500/20 text-pink-600' }
+                      ].map((category, index) => (
+                        <motion.div
+                          key={`popular-cat-${category.name}`}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.3, delay: index * 0.05 }}
+                        >
+                          <Link href={`/news?category=${category.name.toLowerCase()}`}>
+                            <div className={`${category.color} border rounded-lg p-3 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-md`}>
+                              <div className="font-semibold text-sm mb-1">{category.name}</div>
+                              <div className="text-xs opacity-70">{category.count} articles</div>
+                            </div>
+                          </Link>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {/* Newsletter Subscription */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.7 }}
+              >
+                <Card className="border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden bg-gradient-to-br from-primary/5 to-primary/10">
+                  <CardContent className="p-6">
+                    <div className="text-center mb-4">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mb-3">
+                        <svg className="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-bold mb-2">Stay Updated</h3>
+                      <p className="text-sm text-muted-foreground">Get the latest news delivered to your inbox</p>
+                    </div>
+                    <div className="space-y-2">
+                      <Input 
+                        type="email" 
+                        placeholder="Enter your email" 
+                        className="w-full"
+                      />
+                      <Button className="w-full">Subscribe Now</Button>
                     </div>
                   </CardContent>
                 </Card>
