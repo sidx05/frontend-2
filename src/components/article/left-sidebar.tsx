@@ -2,13 +2,11 @@
 
 import { SidebarAd, NewsletterSignup } from "@/components/article/sidebar-ad";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState, useCallback } from "react";
 
 export function LeftSidebar() {
   const [ads, setAds] = useState<any[]>([]);
-  const [stats, setStats] = useState<any>(null);
 
   // Track ad impression
   const trackAdImpression = useCallback(async (adId: string) => {
@@ -50,21 +48,7 @@ export function LeftSidebar() {
       }
     };
 
-    // Fetch stats
-    const fetchStats = async () => {
-      try {
-        const response = await fetch("/api/stats");
-        const data = await response.json();
-        if (data.success) {
-          setStats(data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching stats:", error);
-      }
-    };
-
     fetchAds();
-    fetchStats();
   }, []);
 
   const getAdByPosition = (position: string) => {
@@ -94,38 +78,6 @@ export function LeftSidebar() {
 
       {/* Newsletter Signup */}
       <NewsletterSignup />
-
-      {/* Quick Stats */}
-      {stats && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <TrendingUp className="h-4 w-4" />
-                Today's Stats
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Articles Published</span>
-                <span className="font-bold">{stats.articlesPublishedToday}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Total Readers</span>
-                <span className="font-bold">{(stats.totalReaders / 1000).toFixed(1)}K</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Breaking News</span>
-                <span className="font-bold text-red-500">{stats.breakingNews}</span>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
 
       {/* Advertisement Card */}
       {middleAd && (

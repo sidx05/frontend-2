@@ -16,7 +16,8 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { LeftSidebar } from "./left-sidebar";
 import { RightSidebar } from "./right-sidebar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 
 interface ArticleViewerProps {
   article: any;
@@ -25,6 +26,24 @@ interface ArticleViewerProps {
 export default function ArticleViewer({ article }: ArticleViewerProps) {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [relatedArticles, setRelatedArticles] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Fetch related articles from different languages
+    const fetchRelatedArticles = async () => {
+      try {
+        const response = await fetch(`/api/articles?limit=6&exclude=${article._id || article.id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setRelatedArticles(data.data?.slice(0, 6) || []);
+        }
+      } catch (error) {
+        console.error('Error fetching related articles:', error);
+      }
+    };
+
+    fetchRelatedArticles();
+  }, [article._id, article.id]);
 
   const handleBookmark = () => setIsBookmarked(!isBookmarked);
   const handleShare = (platform: string) => {
@@ -177,29 +196,70 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
 
                 <Separator className="my-8" />
 
-                {article.relatedArticles && (
-                  <section>
-                    <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {article.relatedArticles.map((ra: any) => (
-                        <Card key={ra.id || ra._id} className="group hover:shadow-lg transition-shadow">
-                          <div className="aspect-video bg-muted rounded-t-lg overflow-hidden">
-                            <img src={ra.images?.[0]?.url || "/placeholder.png"} alt={ra.images?.[0]?.alt || ra.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                          </div>
-                          <CardContent className="p-4">
-                            <Badge variant="secondary" className="mb-2">{ra.category?.label || ra.category || "General"}</Badge>
-                            <h3 className="font-semibold mb-2 line-clamp-2">{ra.title}</h3>
-                            <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{ra.summary}</p>
-                            <div className="flex items-center justify-between">
-                              {ra.readTime && <span className="text-xs text-muted-foreground">{ra.readTime}</span>}
-                              <Button variant="ghost" size="sm">Read More</Button>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </section>
-                )}
+                {/* Related/More Articles */}
+                <section>
+                  <h2 className="text-2xl font-bold mb-6">More Articles You May Like</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {relatedArticles.length > 0 ? (
+                      relatedArticles.map((ra: any) => (
+                        <Link key={ra._id || ra.id} href={`/article/${ra.slug || ra._id}`}>
+                          <Card className="group hover:shadow-lg transition-shadow cursor-pointer h-full">
+                            {(ra.images?.[0]?.url || ra.thumbnail) && (
+                              <div className="aspect-video bg-muted rounded-t-lg overflow-hidden">
+                                <img 
+                                  src={ra.images?.[0]?.url || ra.thumbnail} 
+                                  alt={ra.images?.[0]?.alt || ra.title} 
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                                />
+                              </div>
+                            )}
+                            <CardContent className="p-4">
+                              <Badge variant="secondary" className="mb-2">
+                                {ra.category?.label || ra.category?.name || ra.category || "General"}
+                              </Badge>
+                              <h3 className="font-semibold mb-2 line-clamp-2">{ra.title}</h3>
+                              <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{ra.summary}</p>
+                              <div className="flex items-center justify-between">
+                                {ra.readTime && <span className="text-xs text-muted-foreground">{ra.readTime}</span>}
+                                {ra.language && ra.language !== article.language && (
+                                  <Badge variant="outline" className="text-xs">
+                                    {ra.language.toUpperCase()}
+                                  </Badge>
+                                )}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                      ))
+                    ) : (
+                      article.relatedArticles?.map((ra: any) => (
+                        <Link key={ra._id || ra.id} href={`/article/${ra.slug || ra._id}`}>
+                          <Card className="group hover:shadow-lg transition-shadow cursor-pointer h-full">
+                            {(ra.images?.[0]?.url || ra.thumbnail) && (
+                              <div className="aspect-video bg-muted rounded-t-lg overflow-hidden">
+                                <img 
+                                  src={ra.images?.[0]?.url || ra.thumbnail} 
+                                  alt={ra.images?.[0]?.alt || ra.title} 
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                                />
+                              </div>
+                            )}
+                            <CardContent className="p-4">
+                              <Badge variant="secondary" className="mb-2">
+                                {ra.category?.label || ra.category || "General"}
+                              </Badge>
+                              <h3 className="font-semibold mb-2 line-clamp-2">{ra.title}</h3>
+                              <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{ra.summary}</p>
+                              <div className="flex items-center justify-between">
+                                {ra.readTime && <span className="text-xs text-muted-foreground">{ra.readTime}</span>}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                      ))
+                    )}
+                  </div>
+                </section>
               </motion.article>
             </div>
 

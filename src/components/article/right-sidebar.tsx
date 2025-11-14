@@ -2,7 +2,7 @@
 
 import { SidebarAd, TrendingArticle } from "@/components/article/sidebar-ad";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, Star, Calendar } from "lucide-react";
+import { TrendingUp, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
@@ -11,7 +11,6 @@ export function RightSidebar() {
   const [trendingArticles, setTrendingArticles] = useState<any[]>([]);
   const [ads, setAds] = useState<any[]>([]);
   const [editorsPicks, setEditorsPicks] = useState<any[]>([]);
-  const [events, setEvents] = useState<any[]>([]);
 
   // Track ad impression
   const trackAdImpression = useCallback(async (adId: string) => {
@@ -79,23 +78,9 @@ export function RightSidebar() {
       }
     };
 
-    // Fetch events
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch("/api/events");
-        const data = await response.json();
-        if (data.success) {
-          setEvents(data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      }
-    };
-
     fetchTrending();
     fetchAds();
     fetchEditorsPicks();
-    fetchEvents();
   }, []);
 
   const getAdByPosition = (position: string) => {
@@ -191,52 +176,6 @@ export function RightSidebar() {
           image={middleAd.image}
           badge={middleAd.badge}
           link={middleAd.link}
-          onImpression={trackAdImpression}
-          onClick={trackAdClick}
-        />
-      )}
-
-      {/* Upcoming Events */}
-      {events.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                Upcoming Events
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {events.map((event, idx) => (
-                <Link key={idx} href={event.link || "#"}>
-                  <div className="border-b border-border pb-3 last:border-0 last:pb-0 hover:bg-muted/50 rounded p-2 cursor-pointer transition-colors">
-                    <h4 className="font-semibold text-sm mb-1">{event.title}</h4>
-                    <div className="text-xs text-muted-foreground">
-                      <div>{event.date}</div>
-                      <div>{event.location}</div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
-
-      {/* Compact Advertisement */}
-      {bottomAd && (
-        <SidebarAd
-          id={bottomAd.id}
-          type={bottomAd.type || "compact"}
-          title={bottomAd.title}
-          description={bottomAd.description}
-          image={bottomAd.image}
-          badge={bottomAd.badge}
-          link={bottomAd.link}
           onImpression={trackAdImpression}
           onClick={trackAdClick}
         />

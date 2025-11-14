@@ -125,7 +125,9 @@ export function TrendingArticle({ article, onClick }: { article: any; onClick?: 
     if (onClick) {
       onClick();
     }
-    window.location.href = `/article/${article.slug || article._id}`;
+    // Use Next.js navigation
+    const articleUrl = `/article/${article.slug || article._id}`;
+    window.location.href = articleUrl;
   };
 
   return (
