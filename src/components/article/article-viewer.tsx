@@ -29,11 +29,13 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
   const [relatedArticles, setRelatedArticles] = useState<any[]>([]);
 
   useEffect(() => {
-    // Fetch related articles from different languages
+    // Fetch related articles - try trending articles as fallback
     const fetchRelatedArticles = async () => {
       try {
         const currentId = article._id || article.id;
-        let url = '/api/articles?limit=6';
+        
+        // Try to fetch from articles API first
+        let url = '/api/articles?limit=8';
         if (currentId) {
           url += `&exclude=${currentId}`;
         }
@@ -42,24 +44,55 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
         console.log('Current article ID:', currentId);
         console.log('Fetch URL:', url);
         
-        const response = await fetch(url);
-        console.log('Response status:', response.status, response.statusText);
+        let response = await fetch(url);
+        console.log('Articles API response status:', response.status);
         
         if (response.ok) {
           const data = await response.json();
-          console.log('API Response:', data);
+          console.log('Articles API Response:', data);
           
-          if (data.success && data.data) {
-            console.log('Related articles found:', data.data.length);
-            setRelatedArticles(data.data.slice(0, 6));
-          } else {
-            console.warn('No data in response or success is false');
+          if (data.success && data.data && data.data.length > 0) {
+            console.log('Related articles found from articles API:', data.data.length);
+            // Filter out current article and take 6
+            const filtered = data.data.filter((a: any) => 
+              String(a._id || a.id) !== String(currentId)
+            ).slice(0, 6);
+            setRelatedArticles(filtered);
+            return;
           }
-        } else {
-          console.error('Response not OK:', await response.text());
+        }
+        
+        // Fallback to trending articles
+        console.log('Falling back to trending articles...');
+        response = await fetch('/api/trending?limit=8');
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Trending API Response:', data);
+          
+          if (data.success && data.data && data.data.length > 0) {
+            // Filter out current article
+            const filtered = data.data.filter((a: any) => 
+              String(a._id || a.id) !== String(currentId)
+            ).slice(0, 6);
+            console.log('Using trending articles as related:', filtered.length);
+            setRelatedArticles(filtered);
+          }
         }
       } catch (error) {
         console.error('Error fetching related articles:', error);
+        // Last fallback - try trending one more time
+        try {
+          const response = await fetch('/api/trending?limit=6');
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.data) {
+              setRelatedArticles(data.data);
+            }
+          }
+        } catch (e) {
+          console.error('All fallbacks failed:', e);
+        }
       }
     };
 
@@ -218,79 +251,86 @@ export default function ArticleViewer({ article }: ArticleViewerProps) {
                 <Separator className="my-8" />
 
                 {/* Related/More Articles */}
-                <section>
-                  <h2 className="text-2xl font-bold mb-6">More Articles You May Like</h2>
-                  {relatedArticles.length === 0 && !article.relatedArticles?.length && (
-                    <div className="text-center py-8 text-muted-foreground">
-                      Loading more articles...
+                <section className="mt-12">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-3xl font-bold">More Articles You May Like</h2>
+                    {relatedArticles.length > 0 && (
+                      <Badge variant="secondary" className="text-sm">
+                        {relatedArticles.length} Articles
+                      </Badge>
+                    )}
+                  </div>
+                  
+                  {relatedArticles.length === 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {[1, 2, 3, 4, 5, 6].map((n) => (
+                        <Card key={n} className="overflow-hidden animate-pulse">
+                          <div className="aspect-video bg-muted" />
+                          <CardContent className="p-4 space-y-3">
+                            <div className="h-4 bg-muted rounded w-20" />
+                            <div className="h-5 bg-muted rounded w-full" />
+                            <div className="h-4 bg-muted rounded w-3/4" />
+                          </CardContent>
+                        </Card>
+                      ))}
                     </div>
-                  )}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {relatedArticles.length > 0 ? (
-                      relatedArticles.map((ra: any) => {
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {relatedArticles.map((ra: any, index: number) => {
                         const articleLink = `/article/${ra.slug || ra._id || ra.id}`;
                         return (
-                          <Link key={ra._id || ra.id} href={articleLink}>
-                            <Card className="group hover:shadow-lg transition-shadow cursor-pointer h-full">
+                          <Link key={ra._id || ra.id || index} href={articleLink}>
+                            <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer h-full overflow-hidden border-2 hover:border-primary/50">
                               {(ra.images?.[0]?.url || ra.thumbnail) && (
-                                <div className="aspect-video bg-muted rounded-t-lg overflow-hidden">
+                                <div className="aspect-video bg-muted overflow-hidden relative">
                                   <img 
                                     src={ra.images?.[0]?.url || ra.thumbnail} 
                                     alt={ra.images?.[0]?.alt || ra.title} 
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                                   />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
                               )}
-                              <CardContent className="p-4">
-                                <Badge variant="secondary" className="mb-2">
-                                  {ra.category?.label || ra.category?.name || ra.category || "General"}
-                                </Badge>
-                                <h3 className="font-semibold mb-2 line-clamp-2">{ra.title}</h3>
-                                <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{ra.summary}</p>
-                                <div className="flex items-center justify-between">
-                                  {ra.readTime && <span className="text-xs text-muted-foreground">{ra.readTime}</span>}
+                              <CardContent className="p-5 space-y-3">
+                                <div className="flex items-center gap-2">
+                                  <Badge variant="secondary" className="text-xs font-semibold">
+                                    {ra.category?.label || ra.category?.name || ra.category || "General"}
+                                  </Badge>
                                   {ra.language && ra.language !== article.language && (
                                     <Badge variant="outline" className="text-xs">
                                       {ra.language.toUpperCase()}
                                     </Badge>
                                   )}
                                 </div>
-                              </CardContent>
-                            </Card>
-                          </Link>
-                        );
-                      })
-                    ) : (
-                      article.relatedArticles?.map((ra: any) => {
-                        const articleLink = `/article/${ra.slug || ra._id || ra.id}`;
-                        return (
-                          <Link key={ra._id || ra.id} href={articleLink}>
-                            <Card className="group hover:shadow-lg transition-shadow cursor-pointer h-full">
-                              {(ra.images?.[0]?.url || ra.thumbnail) && (
-                                <div className="aspect-video bg-muted rounded-t-lg overflow-hidden">
-                                  <img 
-                                    src={ra.images?.[0]?.url || ra.thumbnail} 
-                                    alt={ra.images?.[0]?.alt || ra.title} 
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                                  />
-                                </div>
-                              )}
-                              <CardContent className="p-4">
-                                <Badge variant="secondary" className="mb-2">
-                                  {ra.category?.label || ra.category || "General"}
-                                </Badge>
-                                <h3 className="font-semibold mb-2 line-clamp-2">{ra.title}</h3>
-                                <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{ra.summary}</p>
-                                <div className="flex items-center justify-between">
-                                  {ra.readTime && <span className="text-xs text-muted-foreground">{ra.readTime}</span>}
+                                <h3 className="font-bold text-lg line-clamp-2 group-hover:text-primary transition-colors">
+                                  {ra.title}
+                                </h3>
+                                {ra.summary && (
+                                  <p className="text-sm text-muted-foreground line-clamp-2">
+                                    {ra.summary}
+                                  </p>
+                                )}
+                                <div className="flex items-center justify-between pt-2 text-xs text-muted-foreground">
+                                  {ra.readTime && (
+                                    <span className="flex items-center gap-1">
+                                      <Clock className="h-3 w-3" />
+                                      {ra.readTime}
+                                    </span>
+                                  )}
+                                  {ra.viewCount && (
+                                    <span className="flex items-center gap-1">
+                                      <Eye className="h-3 w-3" />
+                                      {ra.viewCount.toLocaleString()}
+                                    </span>
+                                  )}
                                 </div>
                               </CardContent>
                             </Card>
                           </Link>
                         );
-                      })
-                    )}
-                  </div>
+                      })}
+                    </div>
+                  )}
                 </section>
               </motion.article>
             </div>
