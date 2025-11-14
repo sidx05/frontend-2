@@ -2,15 +2,13 @@
 
 import { SidebarAd, NewsletterSignup } from "@/components/article/sidebar-ad";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, Award, Zap } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState, useCallback } from "react";
-import Link from "next/link";
 
 export function LeftSidebar() {
   const [ads, setAds] = useState<any[]>([]);
   const [stats, setStats] = useState<any>(null);
-  const [categories, setCategories] = useState<any[]>([]);
 
   // Track ad impression
   const trackAdImpression = useCallback(async (adId: string) => {
@@ -65,22 +63,8 @@ export function LeftSidebar() {
       }
     };
 
-    // Fetch category stats
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch("/api/categories/stats");
-        const data = await response.json();
-        if (data.success) {
-          setCategories(data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
     fetchAds();
     fetchStats();
-    fetchCategories();
   }, []);
 
   const getAdByPosition = (position: string) => {
@@ -156,34 +140,6 @@ export function LeftSidebar() {
           onImpression={trackAdImpression}
           onClick={trackAdClick}
         />
-      )}
-
-      {/* Categories Quick Access */}
-      {categories.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <Zap className="h-4 w-4" />
-                Popular Categories
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {categories.map((cat, idx) => (
-                <Link key={idx} href={`/categories/${cat.name.toLowerCase()}`}>
-                  <div className="flex justify-between items-center py-2 border-b border-border last:border-0 hover:bg-muted/50 rounded px-2 cursor-pointer transition-colors">
-                    <span className="text-sm font-medium">{cat.name}</span>
-                    <span className="text-xs text-muted-foreground">{cat.count} articles</span>
-                  </div>
-                </Link>
-              ))}
-            </CardContent>
-          </Card>
-        </motion.div>
       )}
 
       {/* Compact Ad */}
