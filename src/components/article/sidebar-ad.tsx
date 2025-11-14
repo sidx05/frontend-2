@@ -125,9 +125,24 @@ export function TrendingArticle({ article, onClick }: { article: any; onClick?: 
     if (onClick) {
       onClick();
     }
-    // Use Next.js navigation
-    const articleUrl = `/article/${article.slug || article._id}`;
-    window.location.href = articleUrl;
+    // Use the article's ID - try multiple possible fields
+    const articleId = article.slug || article._id || article.id;
+    
+    console.log('=== TrendingArticle Click Debug ===');
+    console.log('Full article object:', JSON.stringify(article, null, 2));
+    console.log('article.slug:', article.slug);
+    console.log('article._id:', article._id);
+    console.log('article.id:', article.id);
+    console.log('Computed articleId:', articleId);
+    console.log('Final URL:', `/article/${articleId}`);
+    console.log('================================');
+    
+    if (articleId) {
+      window.location.href = `/article/${articleId}`;
+    } else {
+      console.error('❌ No article ID found in any field:', article);
+      alert('Unable to open article - no valid ID found');
+    }
   };
 
   return (

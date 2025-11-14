@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     })
       .sort({ viewCount: -1, publishedAt: -1 })
       .limit(limit)
-      .select('title summary thumbnail source publishedAt language viewCount slug category categories')
+      .select('title summary thumbnail images source publishedAt language viewCount slug category categories readTime')
       .lean();
     
     // If not enough trending articles, get recent popular articles
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
       })
         .sort({ publishedAt: -1 })
         .limit(limit - articles.length)
-        .select('title summary thumbnail source publishedAt language viewCount slug category categories')
+        .select('title summary thumbnail images source publishedAt language viewCount slug category categories readTime')
         .lean();
       
       articles = [...articles, ...recentArticles];
@@ -119,10 +119,15 @@ export async function GET(request: NextRequest) {
     
     // Format response
     const trendingArticles = articles.map(article => ({
-      id: article._id,
+      _id: String(article._id),
+      id: String(article._id),
+      slug: article.slug || null,
       title: article.title,
       summary: article.summary,
       thumbnail: article.thumbnail,
+      images: article.images,
+      category: article.category,
+      readTime: article.readTime,
       source: {
         name: article.source?.name || 'Unknown',
         url: article.source?.url || ''
@@ -132,6 +137,16 @@ export async function GET(request: NextRequest) {
       viewCount: article.viewCount,
       url: `/article/${article.slug || article._id}`
     }));
+
+    console.log('=== Trending API Response Debug ===');
+    console.log('Total articles:', trendingArticles.length);
+    if (trendingArticles.length > 0) {
+      console.log('First article:', JSON.stringify(trendingArticles[0], null, 2));
+      console.log('First article _id type:', typeof trendingArticles[0]._id);
+      console.log('First article id type:', typeof trendingArticles[0].id);
+      console.log('First article slug:', trendingArticles[0].slug);
+    }
+    console.log('==================================');
     
     return NextResponse.json({
       success: true,
