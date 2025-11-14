@@ -3,19 +3,39 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, TrendingUp, Clock, Eye } from "lucide-react";
+import { ExternalLink, Clock, Eye } from "lucide-react";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 interface AdProps {
+  id?: string;
   title: string;
   description: string;
   image?: string;
   badge?: string;
   link?: string;
   type?: "banner" | "card" | "compact";
+  onImpression?: (adId: string) => void;
+  onClick?: (adId: string) => void;
 }
 
-export function SidebarAd({ title, description, image, badge, link, type = "card" }: AdProps) {
+export function SidebarAd({ id, title, description, image, badge, link, type = "card", onImpression, onClick }: AdProps) {
+  useEffect(() => {
+    // Track impression when ad is rendered
+    if (id && onImpression) {
+      onImpression(id);
+    }
+  }, [id, onImpression]);
+
+  const handleClick = () => {
+    if (id && onClick) {
+      onClick(id);
+    }
+    if (link) {
+      window.open(link, '_blank');
+    }
+  };
+
   if (type === "banner") {
     return (
       <motion.div
@@ -23,7 +43,7 @@ export function SidebarAd({ title, description, image, badge, link, type = "card
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="relative overflow-hidden rounded-lg mb-6 group cursor-pointer"
-        onClick={() => link && window.open(link, '_blank')}
+        onClick={handleClick}
       >
         <div className="relative h-64 bg-gradient-to-br from-blue-500 to-purple-600 p-6 flex flex-col justify-between">
           <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
@@ -51,7 +71,7 @@ export function SidebarAd({ title, description, image, badge, link, type = "card
         className="mb-4"
       >
         <Card className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer group"
-          onClick={() => link && window.open(link, '_blank')}>
+          onClick={handleClick}>
           <CardContent className="p-4">
             <div className="flex gap-3">
               {image && (
@@ -79,7 +99,7 @@ export function SidebarAd({ title, description, image, badge, link, type = "card
       className="mb-6"
     >
       <Card className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group"
-        onClick={() => link && window.open(link, '_blank')}>
+        onClick={handleClick}>
         {image && (
           <div className="relative h-40 bg-muted overflow-hidden">
             <img src={image} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -100,7 +120,14 @@ export function SidebarAd({ title, description, image, badge, link, type = "card
   );
 }
 
-export function TrendingArticle({ article }: { article: any }) {
+export function TrendingArticle({ article, onClick }: { article: any; onClick?: () => void }) {
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    }
+    window.location.href = `/article/${article.slug || article._id}`;
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -108,13 +135,13 @@ export function TrendingArticle({ article }: { article: any }) {
       transition={{ duration: 0.5 }}
       className="mb-4"
     >
-      <Card className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer group">
+      <Card className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer group" onClick={handleClick}>
         <CardContent className="p-4">
           <div className="flex gap-3">
-            {article.images?.[0]?.url && (
+            {(article.images?.[0]?.url || article.thumbnail) && (
               <div className="w-24 h-24 rounded bg-muted flex-shrink-0 overflow-hidden">
                 <img 
-                  src={article.images[0].url} 
+                  src={article.images?.[0]?.url || article.thumbnail} 
                   alt={article.title} 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform" 
                 />
@@ -134,7 +161,7 @@ export function TrendingArticle({ article }: { article: any }) {
                     {article.readTime}
                   </span>
                 )}
-                {article.viewCount && (
+                {article.viewCount !== undefined && (
                   <span className="flex items-center gap-1">
                     <Eye className="h-3 w-3" />
                     {article.viewCount.toLocaleString()}
@@ -150,6 +177,37 @@ export function TrendingArticle({ article }: { article: any }) {
 }
 
 export function NewsletterSignup() {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setMessage("Successfully subscribed!");
+        setEmail("");
+      } else {
+        setMessage(data.error || "Failed to subscribe");
+      }
+    } catch (error) {
+      setMessage("An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -163,12 +221,24 @@ export function NewsletterSignup() {
           <p className="text-sm text-muted-foreground mb-4">
             Get the latest news delivered directly to your inbox.
           </p>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm mb-3"
-          />
-          <Button className="w-full">Subscribe</Button>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm mb-3"
+            />
+            <Button className="w-full" type="submit" disabled={loading}>
+              {loading ? "Subscribing..." : "Subscribe"}
+            </Button>
+          </form>
+          {message && (
+            <p className={`text-xs mt-2 ${message.includes("Success") ? "text-green-600" : "text-red-600"}`}>
+              {message}
+            </p>
+          )}
         </CardContent>
       </Card>
     </motion.div>

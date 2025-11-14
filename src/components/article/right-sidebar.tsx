@@ -4,16 +4,46 @@ import { SidebarAd, TrendingArticle } from "./sidebar-ad";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Star, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import Link from "next/link";
 
 export function RightSidebar() {
   const [trendingArticles, setTrendingArticles] = useState<any[]>([]);
+  const [ads, setAds] = useState<any[]>([]);
+  const [editorsPicks, setEditorsPicks] = useState<any[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
+
+  // Track ad impression
+  const trackAdImpression = useCallback(async (adId: string) => {
+    try {
+      await fetch("/api/ads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ adId, action: "impression" }),
+      });
+    } catch (error) {
+      console.error("Error tracking ad impression:", error);
+    }
+  }, []);
+
+  // Track ad click
+  const trackAdClick = useCallback(async (adId: string) => {
+    try {
+      await fetch("/api/ads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ adId, action: "click" }),
+      });
+    } catch (error) {
+      console.error("Error tracking ad click:", error);
+    }
+  }, []);
 
   useEffect(() => {
     // Fetch trending articles
     const fetchTrending = async () => {
       try {
-        const response = await fetch('/api/articles?limit=5&sort=viewCount');
+        const response = await fetch('/api/trending?limit=5');
         if (response.ok) {
           const data = await response.json();
           setTrendingArticles(data.data?.slice(0, 5) || []);
@@ -23,8 +53,58 @@ export function RightSidebar() {
       }
     };
 
+    // Fetch ads for right sidebar
+    const fetchAds = async () => {
+      try {
+        const response = await fetch("/api/ads?position=right");
+        const data = await response.json();
+        if (data.success) {
+          setAds(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching ads:", error);
+      }
+    };
+
+    // Fetch editor's picks
+    const fetchEditorsPicks = async () => {
+      try {
+        const response = await fetch("/api/editors-picks");
+        const data = await response.json();
+        if (data.success) {
+          setEditorsPicks(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching editor's picks:", error);
+      }
+    };
+
+    // Fetch events
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch("/api/events");
+        const data = await response.json();
+        if (data.success) {
+          setEvents(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
     fetchTrending();
+    fetchAds();
+    fetchEditorsPicks();
+    fetchEvents();
   }, []);
+
+  const getAdByPosition = (position: string) => {
+    return ads.find(ad => ad.position === position);
+  };
+
+  const topAd = getAdByPosition("right-top");
+  const middleAd = getAdByPosition("right-middle");
+  const bottomAd = getAdByPosition("right-bottom");
 
   return (
     <aside className="space-y-6">
@@ -56,124 +136,111 @@ export function RightSidebar() {
       </motion.div>
 
       {/* Advertisement */}
-      <SidebarAd
-        type="banner"
-        title="Boost Your Business"
-        description="Advertise with us and reach millions of readers worldwide"
-        badge="Advertise"
-        link="#"
-      />
+      {topAd && (
+        <SidebarAd
+          id={topAd.id}
+          type={topAd.type || "banner"}
+          title={topAd.title}
+          description={topAd.description}
+          badge={topAd.badge}
+          image={topAd.image}
+          link={topAd.link}
+          onImpression={trackAdImpression}
+          onClick={trackAdClick}
+        />
+      )}
 
       {/* Editor's Picks */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <Star className="h-4 w-4 text-yellow-500" />
-              Editor's Picks
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {[
-              {
-                title: "The Future of Artificial Intelligence in 2025",
-                category: "Technology",
-                time: "5 min read"
-              },
-              {
-                title: "Global Markets React to Economic Policy Changes",
-                category: "Business",
-                time: "7 min read"
-              },
-              {
-                title: "Climate Summit Reaches Historic Agreement",
-                category: "Environment",
-                time: "6 min read"
-              },
-              {
-                title: "Breakthrough in Renewable Energy Storage",
-                category: "Science",
-                time: "8 min read"
-              }
-            ].map((item, idx) => (
-              <div key={idx} className="border-b border-border pb-3 last:border-0 last:pb-0 hover:bg-muted/50 rounded p-2 cursor-pointer transition-colors">
-                <h4 className="font-semibold text-sm mb-1 line-clamp-2">{item.title}</h4>
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{item.category}</span>
-                  <span>{item.time}</span>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </motion.div>
+      {editorsPicks.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Star className="h-4 w-4 text-yellow-500" />
+                Editor's Picks
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {editorsPicks.map((item, idx) => (
+                <Link key={idx} href={item.slug ? `/article/${item.slug}` : "#"}>
+                  <div className="border-b border-border pb-3 last:border-0 last:pb-0 hover:bg-muted/50 rounded p-2 cursor-pointer transition-colors">
+                    <h4 className="font-semibold text-sm mb-1 line-clamp-2">{item.title}</h4>
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span>{item.category}</span>
+                      <span>{item.time}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       {/* Sponsored Content */}
-      <SidebarAd
-        type="card"
-        title="Professional Development Course"
-        description="Master your skills with industry-leading experts. Enroll now and get 30% off!"
-        image="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop"
-        badge="Sponsored"
-        link="#"
-      />
+      {middleAd && (
+        <SidebarAd
+          id={middleAd.id}
+          type={middleAd.type || "card"}
+          title={middleAd.title}
+          description={middleAd.description}
+          image={middleAd.image}
+          badge={middleAd.badge}
+          link={middleAd.link}
+          onImpression={trackAdImpression}
+          onClick={trackAdClick}
+        />
+      )}
 
       {/* Upcoming Events */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-      >
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              Upcoming Events
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {[
-              {
-                title: "Tech Innovation Summit 2025",
-                date: "Nov 20, 2025",
-                location: "Virtual"
-              },
-              {
-                title: "Global Business Forum",
-                date: "Nov 25, 2025",
-                location: "New York"
-              },
-              {
-                title: "Digital Marketing Workshop",
-                date: "Dec 1, 2025",
-                location: "Online"
-              }
-            ].map((event, idx) => (
-              <div key={idx} className="border-b border-border pb-3 last:border-0 last:pb-0 hover:bg-muted/50 rounded p-2 cursor-pointer transition-colors">
-                <h4 className="font-semibold text-sm mb-1">{event.title}</h4>
-                <div className="text-xs text-muted-foreground">
-                  <div>{event.date}</div>
-                  <div>{event.location}</div>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </motion.div>
+      {events.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                Upcoming Events
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {events.map((event, idx) => (
+                <Link key={idx} href={event.link || "#"}>
+                  <div className="border-b border-border pb-3 last:border-0 last:pb-0 hover:bg-muted/50 rounded p-2 cursor-pointer transition-colors">
+                    <h4 className="font-semibold text-sm mb-1">{event.title}</h4>
+                    <div className="text-xs text-muted-foreground">
+                      <div>{event.date}</div>
+                      <div>{event.location}</div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       {/* Compact Advertisement */}
-      <SidebarAd
-        type="compact"
-        title="Investment Platform"
-        description="Start investing with as little as $10. Join 2M+ investors"
-        image="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=200&h=200&fit=crop"
-        badge="Ad"
-        link="#"
-      />
+      {bottomAd && (
+        <SidebarAd
+          id={bottomAd.id}
+          type={bottomAd.type || "compact"}
+          title={bottomAd.title}
+          description={bottomAd.description}
+          image={bottomAd.image}
+          badge={bottomAd.badge}
+          link={bottomAd.link}
+          onImpression={trackAdImpression}
+          onClick={trackAdClick}
+        />
+      )}
     </aside>
   );
 }
