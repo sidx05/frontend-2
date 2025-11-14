@@ -7,7 +7,11 @@ export async function GET(request: Request) {
     const exclude = searchParams.get("exclude");
 
     // Forward to backend API
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    // Use environment variable or fallback to production backend URL
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 
+                       process.env.BACKEND_URL || 
+                       "https://backend-2-71va.onrender.com";
+    
     let url = `${backendUrl}/api/articles?limit=${limit}`;
     
     if (exclude) {
