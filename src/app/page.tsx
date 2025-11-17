@@ -232,7 +232,7 @@ export default function HomePage() {
     return names[lang] || lang.charAt(0).toUpperCase() + lang.slice(1);
   }
 
-
+  
   function mapArticleToUi(a: BackendArticle) {
     const id = a._id || a.id || a.hash || String(Math.random());
     const slug = a.slug || id;
