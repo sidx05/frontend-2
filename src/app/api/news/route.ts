@@ -4,6 +4,7 @@ import connectDB from '@/lib/database';
 import { Article } from '@/models/Article';
 import { Category } from '@/models/Category';
 import { Settings } from '@/models/Settings';
+import { Source } from '@/models/Source';
 
 
 // GET /api/news?lang=telugu&category=movies&page=1&limit=12 - Get filtered news
@@ -14,6 +15,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const language = searchParams.get('lang');
     const category = searchParams.get('category');
+    const type = (searchParams.get('type') || '').toLowerCase();
     const page = parseInt(searchParams.get('page') || '1');
     let limit = parseInt(searchParams.get('limit') || '0');
     const search = searchParams.get('search');
@@ -112,7 +114,32 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Combine conditions: category AND (optional) search
+    // Handle media/content type via Source metadata
+    if (type) {
+      const match: any[] = [];
+      if (type === 'video') {
+        match.push({ 'metadata.contentType': 'video' });
+        match.push({ 'metadata.isVideoNews': true });
+      } else if (type === 'photo-gallery' || type === 'photo' || type === 'gallery') {
+        match.push({ 'metadata.contentType': 'photo-gallery' });
+        match.push({ 'metadata.isPhotoGallery': true });
+      } else if (type === 'podcast' || type === 'podcasts') {
+        match.push({ 'metadata.contentType': 'podcast' });
+        match.push({ 'metadata.isPodcast': true });
+      } else if (type === 'opinion' || type === 'editorial') {
+        match.push({ 'metadata.contentType': 'opinion' });
+        match.push({ 'metadata.isOpinion': true });
+      }
+
+      if (match.length) {
+        const sources = await Source.find({ $or: match }).select('_id').lean();
+        const sourceIds = sources.map((s: any) => s._id);
+        // If no sources match, force an empty result efficiently
+        andGroups.push({ 'source.sourceId': { $in: sourceIds.length ? sourceIds : ['__none__'] } });
+      }
+    }
+
+    // Combine conditions: category AND (optional) search AND (optional) type
     if (orConditions.length > 0) andGroups.push({ $or: orConditions });
     if (andGroups.length > 0) query.$and = andGroups;
     
@@ -448,6 +475,7 @@ export async function GET(request: NextRequest) {
       filters: {
         language,
         category,
+        type,
         search,
         sortBy,
         sortOrder

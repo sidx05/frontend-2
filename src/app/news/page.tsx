@@ -60,6 +60,7 @@ function NewsPageContent() {
   const language = searchParams.get('lang') || prettyLangMap[prettyLang] || 'all';
   const languageName = language === 'all' ? 'All Languages' : (languageMap[language] || 'English');
   const categoryFromUrl = searchParams.get('category') || prettyCategory || 'all';
+  const typeFromUrl = (searchParams.get('type') || searchParams.get('contentType') || '').toLowerCase();
   
   // Helper function to get category display name
   const getCategoryDisplayName = () => {
@@ -100,7 +101,7 @@ function NewsPageContent() {
 
   useEffect(() => {
     loadArticles();
-  }, [language, categoryFromUrl, sortBy, currentPage, searchTerm]); // Use categoryFromUrl directly instead of selectedCategory
+  }, [language, categoryFromUrl, typeFromUrl, sortBy, currentPage, searchTerm]); // Include typeFromUrl for filtering
 
   // Sync search term from URL param `q` (from navbar search)
   useEffect(() => {
@@ -162,6 +163,11 @@ function NewsPageContent() {
 
       if (currentCategory !== 'all') {
         params.append('category', currentCategory);
+      }
+
+      // Pass through content type (video, photo-gallery, etc.)
+      if (typeFromUrl) {
+        params.append('type', typeFromUrl);
       }
 
       if (searchTerm) {
@@ -903,10 +909,10 @@ function NewsPageContent() {
                   {[
                     { label: 'Breaking News', icon: '🔥', href: '/latest-news' },
                     { label: 'Live Updates', icon: '📡', href: '/latest-news' },
-                    { label: 'Video News', icon: '📹', href: '/news' },
-                    { label: 'Photo Gallery', icon: '📸', href: '/news' },
-                    { label: 'Podcasts', icon: '🎙️', href: '/news' },
-                    { label: 'Opinion', icon: '💭', href: '/news' }
+                    { label: 'Video News', icon: '📹', href: '/news?type=video' },
+                    { label: 'Photo Gallery', icon: '📸', href: '/news?type=photo-gallery' },
+                    { label: 'Podcasts', icon: '🎙️', href: '/news?type=podcast' },
+                    { label: 'Opinion', icon: '💭', href: '/news?type=opinion' }
                   ].map((item, index) => (
                     <motion.div
                       key={`quick-link-${item.label}`}
