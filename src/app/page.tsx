@@ -863,7 +863,7 @@ export default function HomePage() {
                 </Card>
               </motion.div>
 
-              {/* Newsletter Subscription */}
+              {/* Contact Email */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -877,17 +877,17 @@ export default function HomePage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
                       </div>
-                      <h3 className="text-lg font-bold mb-2">Stay Updated</h3>
-                      <p className="text-sm text-muted-foreground">Get the latest news delivered to your inbox</p>
+                      <h3 className="text-lg font-bold mb-2">Contact Us</h3>
+                      <p className="text-sm text-muted-foreground mb-4">Get in touch for news tips or inquiries</p>
                     </div>
-                    <div className="space-y-2">
-                      <Input 
-                        type="email" 
-                        placeholder="Enter your email" 
-                        className="w-full"
-                      />
-                      <Button className="w-full">Subscribe Now</Button>
-                    </div>
+                    <a href="mailto:team.newshub@outlook.com" className="block">
+                      <Button className="w-full gap-2">
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        team.newshub@outlook.com
+                      </Button>
+                    </a>
                   </CardContent>
                 </Card>
               </motion.div>

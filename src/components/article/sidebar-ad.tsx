@@ -196,37 +196,6 @@ export function TrendingArticle({ article, onClick }: { article: any; onClick?: 
 }
 
 export function NewsletterSignup() {
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
-
-    try {
-      const response = await fetch("/api/newsletter/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setMessage("Successfully subscribed!");
-        setEmail("");
-      } else {
-        setMessage(data.error || "Failed to subscribe");
-      }
-    } catch (error) {
-      setMessage("An error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -236,28 +205,24 @@ export function NewsletterSignup() {
     >
       <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
         <CardContent className="p-6">
-          <h3 className="font-bold text-lg mb-2">Stay Updated</h3>
+          <h3 className="font-bold text-lg mb-2">Contact Us</h3>
           <p className="text-sm text-muted-foreground mb-4">
-            Get the latest news delivered directly to your inbox.
+            Get in touch for news tips, partnerships, or inquiries.
           </p>
-          <form onSubmit={handleSubmit}>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm mb-3"
-            />
-            <Button className="w-full" type="submit" disabled={loading}>
-              {loading ? "Subscribing..." : "Subscribe"}
+          <a 
+            href="mailto:team.newshub@outlook.com"
+            className="block"
+          >
+            <Button className="w-full gap-2" variant="default">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              team.newshub@outlook.com
             </Button>
-          </form>
-          {message && (
-            <p className={`text-xs mt-2 ${message.includes("Success") ? "text-green-600" : "text-red-600"}`}>
-              {message}
-            </p>
-          )}
+          </a>
+          <p className="text-xs text-center mt-3 text-muted-foreground">
+            Click to send us an email
+          </p>
         </CardContent>
       </Card>
     </motion.div>
